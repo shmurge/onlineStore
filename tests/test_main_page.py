@@ -2,6 +2,7 @@ import pytest
 import allure
 from pages.main_page.login_page import LoginPage
 from pages.main_page.region_page import RegionPage
+from pages.profile_page import ProfilePage
 from utils.data import *
 from time import sleep
 
@@ -49,6 +50,13 @@ class TestMainPagePositive:
         page.open_region_modal()
         page.choose_region(region)
         page.should_be_correct_region_in_header(region)
+
+    @allure.suite("Профиль пользователя")
+    @allure.title("Авторизованный пользователь может перейти в свой профиль")
+    def test_authorized_user_can_go_to_profile_page(self, browser, preconditions_login):
+        page = ProfilePage(browser, self.link)
+        page.go_to_profile_page()
+        page.should_be_profile_page()
 
 
 @pytest.mark.negative

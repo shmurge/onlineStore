@@ -20,6 +20,9 @@ class LoginPage(BasePage):
     def go_to_login_page(self):
         with allure.step("Переход на страницу логина"):
             self.login_link.click()
+        self.should_be_login_form()
+
+    def should_be_login_form(self):
         with allure.step("Проверка наличия формы для авторизации"):
             assert self.is_element_visible(*LoginPageLocators.LOGIN_FRAME), "Форма для авторизации не отображается!"
 

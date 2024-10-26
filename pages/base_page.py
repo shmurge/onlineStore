@@ -120,3 +120,8 @@ class BasePage:
         results = self.browser.find_elements(how, what)
         return results
 
+    def should_be_correct_url(self, exp_res):
+        with allure.step("Проверка корректности url"):
+            assert exp_res in self.browser.current_url, (f'Текущий url: {self.browser.current_url} '
+                                                         f'должен содержать подстроку: {exp_res}')
+

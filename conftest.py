@@ -47,18 +47,22 @@ def browser(request):
     browser.maximize_window()
 
     if need_login:
-        test_login(browser)
+        login_in_app(browser)
 
     yield browser
     browser.quit()
 
-def test_login(browser, link=Url.MAIN_PAGE):
+def login_in_app(browser, link=Url.MAIN_PAGE):
     with allure.step("Предусловия: авторизация"):
         page = LoginPage(browser, link)
         page.open(link)
         page.go_to_login_page()
         page.user_login(*UsersData.USER_1)
         page.should_be_user_link()
+
+@pytest.fixture(scope="function")
+def preconditions_login(browser, link=Url.MAIN_PAGE):
+    login_in_app(browser, link)
 
 @pytest.fixture(scope="function")
 def get_browser_language(browser):

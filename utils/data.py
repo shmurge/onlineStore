@@ -1,5 +1,6 @@
 class UsersData:
     USER_1 = ("shmurge3@bk.ru", "ZH7FFCcm3jZaL_c")
+    USER_1_NAME = "Алекс"
 
 
 class InputData:
@@ -24,4 +25,5 @@ class ButtonsData:
     
 class Url:
     MAIN_PAGE = "https://quke.ru/"
+    PROFILE_PAGE = "https://quke.ru/profile"
     
