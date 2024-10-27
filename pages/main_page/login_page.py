@@ -34,21 +34,6 @@ class LoginPage(BasePage):
             self.password_input.send_keys_in_input(password)
             self.sign_in_button.click()
 
-    # def login_input_fill(self, data):
-    #     self.login_input.clear_and_send_keys(data)
-    #
-    # def login_input_clear(self):
-    #     self.login_input.clear_input()
-    #
-    # def password_input_clear(self):
-    #     self.password_input.clear_input()
-    #
-    # def password_input_fill(self, data):
-    #     self.password_input.clear_and_send_keys(data)
-    #
-    # def click_sign_in(self):
-    #     self.sign_in_button.click()
-
     def click_sign_in_without_input_filling(self):
         self.login_input.click()
         self.password_input.click()
@@ -73,6 +58,10 @@ class LoginPage(BasePage):
         with allure.step("Проверка наличия ссылки на личный кабинет пользователя"):
             assert self.is_element_visible(*MainPageLocators.USER_LINK), \
                 "Ссылка на личный кабинет пользователя не отображается!"
+
+    def should_be_login_link(self):
+        with allure.step("Проверка наличия ссылки на страницу авторизации"):
+            self.is_element_visible(*MainPageLocators.LOGIN_LINK)
 
     def should_be_required_field_under_login_input(self):
         exp_message = InputErrors.LOGIN_REQUIRED

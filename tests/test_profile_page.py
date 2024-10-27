@@ -1,6 +1,7 @@
 import pytest
 import allure
 from pages.profile_page import ProfilePage
+from pages.main_page.login_page import LoginPage
 from utils.data import *
 from time import sleep
 
@@ -16,3 +17,8 @@ class TestProfilePagePositive:
         page.open(self.link)
         page.should_be_correct_email_in_profile_card()
         page.should_be_correct_username_in_profile_card()
+
+    @allure.suite("Профиль пользователя")
+    @allure.title("Пользователь может выйти из аккаунта")
+    def test_user_can_logout_of_the_account(self):
+        pass

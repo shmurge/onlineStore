@@ -40,3 +40,7 @@ class ProfilePage(BasePage):
             act_res = self.browser.find_element(*ProfilePageLocators.USER_EMAIL).text
             assert exp_res == act_res, (f'Некорректный email в карточке профиля! '
                                         f'ОР: {exp_res}, ФР: {act_res}')
+
+    def logout(self):
+        with allure.step("Выход из аккаунта"):
+            self.logout_button.click()
