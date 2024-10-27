@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 
+
 class LoginPageLocators:
     LOGIN_FRAME = (By.XPATH, '//*[@class="auth fancybox-content"]')
     LOGIN_INPUT = (By.XPATH, '//*[@id="auth-email"]')

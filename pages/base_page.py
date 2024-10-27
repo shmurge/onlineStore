@@ -4,7 +4,6 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException,
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains as AC
-
 from time import sleep
 
 
@@ -124,4 +123,3 @@ class BasePage:
         with allure.step("Проверка корректности url"):
             assert exp_res in self.browser.current_url, (f'Текущий url: {self.browser.current_url} '
                                                          f'должен содержать подстроку: {exp_res}')
-

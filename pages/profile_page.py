@@ -1,17 +1,16 @@
 import allure
-from pages.base_page import BasePage
+from pages.heager_page import HeaderPage
 from elements.base_elements import *
-from locators.locs_main_page import MainPageLocators
+from locators.locs_header_page import HeaderPageLocators
 from locators.locs_profile_page import ProfilePageLocators
 from utils.data import *
 
 
-class ProfilePage(BasePage):
+class ProfilePage(HeaderPage):
 
     def __init__(self, browser, url, timeout=10):
         super().__init__(browser, url, timeout)
 
-        self.profile_link = Button(self.browser, "Ссылка на профиль юзера", *MainPageLocators.USER_LINK)
         self.logout_button = Button(self.browser, "Кнопка Выйти из аккаунта", *ProfilePageLocators.LOGOUT_BUTTON)
 
     def go_to_profile_page(self):

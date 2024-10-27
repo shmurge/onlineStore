@@ -3,7 +3,7 @@ import allure
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from pages.main_page.login_page import LoginPage
+from pages.login_page import LoginPage
 from utils.data import *
 
 

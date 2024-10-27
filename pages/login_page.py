@@ -1,38 +1,15 @@
 import allure
-from pages.base_page import BasePage
-from elements.base_elements import *
-from locators.locs_main_page import MainPageLocators
 from locators.locs_login_page import LoginPageLocators
+from elements.base_elements import *
+from locators.locs_header_page import HeaderPageLocators
+from pages.heager_page import HeaderPage
 from utils.data import *
 
 
-class LoginPage(BasePage):
+class LoginPage(HeaderPage):
 
     def __init__(self, browser, url, timeout=10):
         super().__init__(browser, url, timeout)
-
-        self.login_link = Button(self.browser, "Линк на форму логина", *MainPageLocators.LOGIN_LINK)
-        self.user_link = Button(self.browser, "Линк на ЛК пользователя", *MainPageLocators.USER_LINK)
-        self.login_input = Input(self.browser, "Инпут Логин", *LoginPageLocators.LOGIN_INPUT)
-        self.password_input = Input(self.browser, "Инпут Пароль", *LoginPageLocators.PASSWORD_INPUT)
-        self.sign_in_button = Button(self.browser, "Кнопка Войти", *LoginPageLocators.SIGN_IN_BUTTON)
-
-    def go_to_login_page(self):
-        with allure.step("Переход на страницу логина"):
-            self.login_link.click()
-        self.should_be_login_form()
-
-    def should_be_login_form(self):
-        with allure.step("Проверка наличия формы для авторизации"):
-            assert self.is_element_visible(*LoginPageLocators.LOGIN_FRAME), "Форма для авторизации не отображается!"
-
-    def user_login(self, login, password):
-        with allure.step("Авторизация пользователя"):
-            self.login_input.clear_input()
-            self.login_input.send_keys_in_input(login)
-            self.password_input.clear_input()
-            self.password_input.send_keys_in_input(password)
-            self.sign_in_button.click()
 
     def click_sign_in_without_input_filling(self):
         self.login_input.click()
@@ -53,15 +30,6 @@ class LoginPage(BasePage):
         act_result = self.sign_in_button.get_button_color()
         with allure.step(f"Проверка цвета ховера: {self.sign_in_button.name}"):
             assert exp_result == act_result, f"Несоответствие цвета ховера! ОР: {exp_result}, ФР: {act_result}"
-
-    def should_be_user_link(self):
-        with allure.step("Проверка наличия ссылки на личный кабинет пользователя"):
-            assert self.is_element_visible(*MainPageLocators.USER_LINK), \
-                "Ссылка на личный кабинет пользователя не отображается!"
-
-    def should_be_login_link(self):
-        with allure.step("Проверка наличия ссылки на страницу авторизации"):
-            self.is_element_visible(*MainPageLocators.LOGIN_LINK)
 
     def should_be_required_field_under_login_input(self):
         exp_message = InputErrors.LOGIN_REQUIRED
