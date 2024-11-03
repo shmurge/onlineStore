@@ -19,3 +19,7 @@ class HeaderPageLocators:
     SEARCH_BUTTON_IN_MAIN_SEARCH_INPUT = (By.XPATH, '//*[@class="h-search__btn"]')
 
     CATALOGUE_BUTTON = (By.XPATH, '//*[@class="main-nav-v2__toggle"]')
+    CATALOGUE_MODAL = (By.XPATH, '//*[@class="cat-nav__inner"]')
+    CATALOGUE_LEFT_SIDEBAR = (By.XPATH, '//*[@class="cat-nav__list"]')
+    CATALOGUE_LEFT_SIDEBAR_ITEMS = (By.XPATH, '//*[@class="cat-nav__list-link"]')
+    CATALOGUE_RIGHT_SIDEBAR = (By.XPATH, '')

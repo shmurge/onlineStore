@@ -1,10 +1,12 @@
 import allure
+from selenium.webdriver.common.action_chains import ActionChains as AC
 from locators.locs_region_page import RegionPageLocators
 from pages.base_page import BasePage
 from elements.base_elements import *
 from locators.locs_header_page import HeaderPageLocators
 from locators.locs_login_page import LoginPageLocators
 from locators.locs_profile_page import ProfilePageLocators
+from locators.locs_product_page import ProductPageLocators
 from utils.data import *
 
 
@@ -19,6 +21,7 @@ class HeaderPage(BasePage):
         self.login_input = Input(self.browser, "Инпут Логин", *LoginPageLocators.LOGIN_INPUT)
         self.password_input = Input(self.browser, "Инпут Пароль", *LoginPageLocators.PASSWORD_INPUT)
         self.sign_in_button = Button(self.browser, "Кнопка Войти", *LoginPageLocators.SIGN_IN_BUTTON)
+        self.catalogue_button = Button(self.browser, "Кнопка Каталог", *HeaderPageLocators.CATALOGUE_BUTTON)
 
         # region
         self.choose_region_button = Button(self.browser, "Выбрать регион", *HeaderPageLocators.CHOOSE_REGION_BUTTON)
@@ -70,3 +73,27 @@ class HeaderPage(BasePage):
             act_res = self.browser.find_element(*HeaderPageLocators.REGION_NAME_IN_HEADER).text
             assert act_res in exp_res, \
                 f'В хэдере отображается некорректный регион ОР: {exp_res} ФР: {act_res}'
+
+    def open_catalogue(self):
+        with allure.step("Открыть каталог"):
+            self.catalogue_button.click()
+        with allure.step("Проверить отображение каталога на экране"):
+            assert self.is_element_visible(*HeaderPageLocators.CATALOGUE_MODAL), "Не отображается каталог с товарами!"
+
+    def select_product_in_catalogue(self, item, product_name):
+        with allure.step(f"Выбрать категорию: {item} и товар: {product_name}"):
+            actions = AC(self.browser)
+            product_type = self.get_product_type(item)
+            actions.move_to_element(product_type).perform()
+            product = self.search_element_by_text(product_name)
+        with allure.step(f"Клик по линку: {product_name}"):
+                product.click()
+
+    def get_product_type(self, item):
+        element = None
+        items_list = self.browser.find_elements(*HeaderPageLocators.CATALOGUE_LEFT_SIDEBAR_ITEMS)
+        for el in items_list:
+            if item.lower() == el.text.lower():
+                element = el
+        return element
+
