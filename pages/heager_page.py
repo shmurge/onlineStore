@@ -8,6 +8,7 @@ from locators.locs_login_page import LoginPageLocators
 from locators.locs_profile_page import ProfilePageLocators
 from locators.locs_product_page import ProductPageLocators
 from utils.data import *
+from selenium.webdriver.common.by import By
 
 
 class HeaderPage(BasePage):
@@ -85,7 +86,7 @@ class HeaderPage(BasePage):
             actions = AC(self.browser)
             product_type = self.get_product_type(item)
             actions.move_to_element(product_type).perform()
-            product = self.search_element_by_text(product_name)
+            product = self.search_element_by_attribute_and_value(HeaderPageLocators.CATALOGUE_SUB_CATEGORY_ATTRIBUTE, product_name)
         with allure.step(f"Клик по линку: {product_name}"):
                 product.click()
 

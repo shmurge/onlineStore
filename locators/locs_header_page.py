@@ -23,3 +23,4 @@ class HeaderPageLocators:
     CATALOGUE_LEFT_SIDEBAR = (By.XPATH, '//*[@class="cat-nav__list"]')
     CATALOGUE_LEFT_SIDEBAR_ITEMS = (By.XPATH, '//*[@class="cat-nav__list-link"]')
     CATALOGUE_RIGHT_SIDEBAR = (By.XPATH, '')
+    CATALOGUE_SUB_CATEGORY_ATTRIBUTE = 'data-ga-value'

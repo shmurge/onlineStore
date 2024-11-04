@@ -16,17 +16,6 @@ class ProductPage(HeaderPage):
         super().__init__(browser, url, timeout)
 
     def check_searching_result(self, exp_res):
-        with allure.step("Проверка результатов поиска"):
-            self.check_searching_result_header(exp_res)
-            self.check_product_list(exp_res)
-
-    def check_searching_result_header(self, exp_res):
-        with allure.step(f"Проверка наличия подстроки: {exp_res} в хедере результатов поиска"):
-            act_res = self.browser.find_element(*ProductPageLocators.SEARCHING_RESULT_HEADER).text
-            assert exp_res.lower() in act_res.lower(), (f"Некорректный результат поиска в хедере! Хедер: {act_res} "
-                                                        f"не содержит подстроки {exp_res}")
-
-    def check_product_list(self, exp_res):
         with allure.step(f"Проверка результатов поиска товара: {exp_res}"):
             product_list = self.browser.find_elements(*ProductPageLocators.PRODUCT_TITLE)
             for el in product_list:

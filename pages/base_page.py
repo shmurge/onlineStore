@@ -100,6 +100,12 @@ class BasePage:
             element = self.browser.find_element(By.XPATH, f"//*[text()='{text}']")
         return element
 
+    def search_element_by_attribute_and_value(self, attribute, value):
+        element = None
+        with allure.step(f'Поиск элемента по атрибуту: {attribute} и значению: {value}'):
+            element = self.browser.find_element(By.XPATH, f"//*[normalize-space(@{attribute})='{value}']")
+        return element
+
     def click_action(self, x, y):  # Необходимо передать функции координаты точки, куда нужно кликнуть
         with allure.step(f"Клик по координатам: {x}, {y}"):
             action = AC(self.browser)

@@ -59,7 +59,20 @@ class TestMainPagePositive:
         page = ProductPage(browser, browser.current_url)
         page.check_searching_result(item_name)
 
-
 @pytest.mark.negative
 class TestMainPageNegative:
-    pass
+    link = TestMainPagePositive.link
+
+    @allure.suite("Поиск товара")
+    @allure.title("Главная: Проверка всех доступных позиций в каталоге")
+    @pytest.mark.parametrize("item_type, item_link, item_name",
+                             [(key, *item) for key, items in Catalogue.CATALOGUE.items() for item in items])
+    @pytest.mark.may_be_login
+    @pytest.mark.test
+    def test_check_all_positions_in_catalogue_from_main_page(self, browser, item_type, item_link, item_name):
+        page = HeaderPage(browser, self.link)
+        page.open(self.link)
+        page.open_catalogue()
+        page.select_product_in_catalogue(item_type, item_link)
+        page = ProductPage(browser, browser.current_url)
+        page.check_searching_result(item_name)
