@@ -2,7 +2,7 @@ import allure
 from locators.locs_login_page import LoginPageLocators
 from elements.base_elements import *
 from locators.locs_header_page import HeaderPageLocators
-from pages.heager_page import HeaderPage
+from pages.header_page import HeaderPage
 from utils.data import *
 
 

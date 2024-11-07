@@ -21,6 +21,9 @@ class HeaderPage(BasePage):
         self.user_link = Button(self.browser, "Линк на ЛК пользователя", *HeaderPageLocators.USER_LINK)
         self.login_input = Input(self.browser, "Инпут Логин", *LoginPageLocators.LOGIN_INPUT)
         self.password_input = Input(self.browser, "Инпут Пароль", *LoginPageLocators.PASSWORD_INPUT)
+        self.main_input = Input(self.browser, "Инпут Поиск в хэдере", *HeaderPageLocators.MAIN_SEARCH_INPUT)
+        self.main_search_button = (
+            Button(self.browser, "Кнопка Искать", *HeaderPageLocators.SEARCH_BUTTON_IN_MAIN_SEARCH_INPUT))
         self.sign_in_button = Button(self.browser, "Кнопка Войти", *LoginPageLocators.SIGN_IN_BUTTON)
         self.catalogue_button = Button(self.browser, "Кнопка Каталог", *HeaderPageLocators.CATALOGUE_BUTTON)
 
@@ -86,9 +89,10 @@ class HeaderPage(BasePage):
             actions = AC(self.browser)
             product_type = self.get_product_type(item)
             actions.move_to_element(product_type).perform()
-            product = self.search_element_by_attribute_and_value(HeaderPageLocators.CATALOGUE_SUB_CATEGORY_ATTRIBUTE, product_name)
+            product = self.search_element_by_attribute_and_value(HeaderPageLocators.CATALOGUE_SUB_CATEGORY_ATTRIBUTE,
+                                                                 product_name)
         with allure.step(f"Клик по линку: {product_name}"):
-                product.click()
+            product.click()
 
     def get_product_type(self, item):
         element = None
@@ -98,3 +102,14 @@ class HeaderPage(BasePage):
                 element = el
         return element
 
+    def check_searching_result(self, exp_res):
+        with allure.step(f"Проверка результатов поиска товара: {exp_res}"):
+            product_list = self.browser.find_elements(*ProductPageLocators.PRODUCT_TITLE)
+            for el in product_list:
+                assert exp_res.lower() in el.text.lower(), (f"Некорректный результат поиска в списке товаров! "
+                                                            f"Товар: {el.text} не содержит подстроки: {exp_res}")
+
+    def search_product_by_main_search_input(self, data):
+        with allure.step("Главная: Поиск товара через инпут поиска в хэдере"):
+            self.main_input.send_keys_in_input(data)
+            self.main_search_button.click()

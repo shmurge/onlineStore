@@ -1,5 +1,5 @@
 import allure
-from pages.heager_page import HeaderPage
+from pages.header_page import HeaderPage
 from elements.base_elements import *
 from locators.locs_header_page import HeaderPageLocators
 from locators.locs_region_page import RegionPageLocators

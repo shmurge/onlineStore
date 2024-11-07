@@ -2,7 +2,7 @@ import random
 import pytest
 import allure
 from random import *
-from pages.heager_page import HeaderPage
+from pages.header_page import HeaderPage
 from pages.login_page import LoginPage
 from pages.main_page import MainPage
 from pages.region_page import RegionPage
@@ -59,6 +59,19 @@ class TestMainPagePositive:
         page = ProductPage(browser, browser.current_url)
         page.check_searching_result(item_name)
 
+    @allure.suite("Поиск товара")
+    @allure.title("Главная: Пользователь может найти товар главный инпут поиска")
+    @pytest.mark.parametrize("product_name", ["Xiaomi Redmi Note 10 Pro", "iPhone 15", "Huawei Matepad SE 11",
+                                              "Samsung Galaxy Tab S9", "Ноутбук Asus Vivobook", "Ноутбук Asus Zenbook",
+                                              "Ноутбук HP EliteBook", "Ноутбук HP ProBook", "Xiaomi Mi Smart Band 9"])
+    @pytest.mark.may_be_login
+    @pytest.mark.test
+    def test_user_can_find_product_by_main_search_input(self, browser, product_name):
+        page = HeaderPage(browser, self.link)
+        page.open(self.link)
+        page.search_product_by_main_search_input(product_name)
+        page.check_searching_result(product_name)
+
 @pytest.mark.negative
 class TestMainPageNegative:
     link = TestMainPagePositive.link
@@ -74,5 +87,4 @@ class TestMainPageNegative:
         page.open(self.link)
         page.open_catalogue()
         page.select_product_in_catalogue(item_type, item_link)
-        page = ProductPage(browser, browser.current_url)
         page.check_searching_result(item_name)
