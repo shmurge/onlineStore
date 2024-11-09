@@ -102,12 +102,12 @@ class HeaderPage(BasePage):
                 element = el
         return element
 
-    def check_searching_result(self, exp_res):
-        with allure.step(f"Проверка результатов поиска товара: {exp_res}"):
-            product_list = self.browser.find_elements(*ProductPageLocators.PRODUCT_TITLE)
-            for el in product_list:
-                assert exp_res.lower() in el.text.lower(), (f"Некорректный результат поиска в списке товаров! "
-                                                            f"Товар: {el.text} не содержит подстроки: {exp_res}")
+    # def check_searching_result(self, exp_res):
+    #     with allure.step(f"Проверка результатов поиска товара: {exp_res}"):
+    #         product_list = self.browser.find_elements(*ProductsListPageLocators.PRODUCT_TITLE)
+    #         for el in product_list:
+    #             assert exp_res.lower() in el.text.lower(), (f"Некорректный результат поиска в списке товаров! "
+    #                                                         f"Товар: {el.text} не содержит подстроки: {exp_res}")
 
     def search_product_by_main_search_input(self, data):
         with allure.step("Главная: Поиск товара через инпут поиска в хэдере"):

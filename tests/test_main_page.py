@@ -7,6 +7,7 @@ from pages.login_page import LoginPage
 from pages.main_page import MainPage
 from pages.region_page import RegionPage
 from pages.profile_page import ProfilePage
+from pages.catalogue_page import CataloguePage
 from pages.product_page import ProductPage
 from utils.data import *
 from time import sleep
@@ -56,21 +57,43 @@ class TestMainPagePositive:
         page.open(self.link)
         page.open_catalogue()
         page.select_product_in_catalogue(item_type, item_link)
-        page = ProductPage(browser, browser.current_url)
+        page = CataloguePage(browser, browser.current_url)
         page.check_searching_result(item_name)
 
     @allure.suite("Поиск товара")
     @allure.title("Главная: Пользователь может найти товар главный инпут поиска")
-    @pytest.mark.parametrize("product_name", ["Xiaomi Redmi Note 10 Pro", "iPhone 15", "Huawei Matepad SE 11",
-                                              "Samsung Galaxy Tab S9", "Ноутбук Asus Vivobook", "Ноутбук Asus Zenbook",
-                                              "Ноутбук HP EliteBook", "Ноутбук HP ProBook", "Xiaomi Mi Smart Band 9"])
+    @pytest.mark.parametrize("product_name", Catalogue.PRODUCT_LIST)
     @pytest.mark.may_be_login
     @pytest.mark.test
     def test_user_can_find_product_by_main_search_input(self, browser, product_name):
         page = HeaderPage(browser, self.link)
         page.open(self.link)
         page.search_product_by_main_search_input(product_name)
+        page = CataloguePage(browser, browser.current_url)
         page.check_searching_result(product_name)
+
+
+
+    # def test_user_can_find_product_by_main_search_input(self, browser, product_name="Xiaomi Redmi Note 13 Pro"):
+    #     page = HeaderPage(browser, self.link)
+    #     page.open(self.link)
+    #     page.search_product_by_main_search_input(product_name)
+    #     page = CataloguePage(browser, browser.current_url)
+    #     page.check_searching_result(product_name)
+    #     sleep(3)
+    #     page.get_product_card(0)
+    #
+    # def test_user_can_find_product_by_catalogue_from_main_page(self, browser):
+    #     item_type = choice(list(Catalogue.CATALOGUE))
+    #     item = choice(Catalogue.CATALOGUE[item_type])
+    #     item_link = item[0]
+    #     item_name = item[1]
+    #     page = HeaderPage(browser, self.link)
+    #     page.open(self.link)
+    #     page.open_catalogue()
+    #     page.select_product_in_catalogue(item_type, item_link)
+    #     page = CataloguePage(browser, browser.current_url)
+    #     page.get_product_card(0)
 
 @pytest.mark.negative
 class TestMainPageNegative:
@@ -87,4 +110,5 @@ class TestMainPageNegative:
         page.open(self.link)
         page.open_catalogue()
         page.select_product_in_catalogue(item_type, item_link)
+        page = CataloguePage(browser, browser.current_url)
         page.check_searching_result(item_name)

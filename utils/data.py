@@ -29,15 +29,6 @@ class Url:
 
 
 class Catalogue:
-    # CATALOGUE = {"Смартфоны": ["Смартфоны Xiaomi", "Смартфоны Samsung", "Смартфоны Apple", "Смартфоны Realme",
-    #                            "Смартфоны Google", "Смартфоны Honor", "Смартфоны Infinix", "Смартфоны OnePlus",
-    #                            "Смартфоны Huawei", "Смартфоны Tecno", "Смартфоны Vivo", "Смартфоны Blackview",
-    #                            "Смартфоны Oppo", "Смартфоны Nothing"],
-    #              "Сотовые телефоны и телефония": ["Кнопочные телефоны", "Кнопочный Digma", "Кнопочный Nokia",
-    #                                               "Кнопочный Philips", "Телефоны", "Радиотелефоны", "Телефоны для бизнеса",
-    #                                               "IP и SIP телефоны", "VoIP-оборудование", "Гарнитуры для телефонов",
-    #                                               "Дополнительные трубки DECT", "Шлюзы"],
-    #              "Планшеты, ноутбуки и электронные книги": ["Планшеты", "Samsung", "Huawei", "Digma", "Ноутбуки"]}
 
     CATALOGUE = {
         "Смартфоны": [["Смартфоны Xiaomi", "Xiaomi"], ["Смартфоны Samsung", "Samsung"], ["Смартфоны Apple", "Apple"],
@@ -61,3 +52,7 @@ class Catalogue:
         "Умные часы и браслеты": [["Xiaomi Mi Band 8", "Xiaomi Mi Smart Band 8"],
                                   ["Xiaomi Mi Band 9", "Xiaomi Mi Smart Band 9"], ["Honor Band 9", "Honor Band 9"]],
         }
+
+    PRODUCT_LIST = ["Xiaomi Redmi Note 13 Pro", "iPhone 15", "Huawei Matepad SE 11", "Samsung Galaxy Tab S9",
+                    "Ноутбук Asus Vivobook", "Ноутбук Asus Zenbook", "Ноутбук HP EliteBook", "Ноутбук HP ProBook",
+                    "Xiaomi Mi Smart Band 9"]
