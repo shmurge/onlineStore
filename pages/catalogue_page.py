@@ -25,23 +25,26 @@ class CataloguePage(HeaderPage):
                 assert exp_res.lower() in el.text.lower(), (f"Некорректный результат поиска в списке товаров! "
                                                             f"Товар: {el.text} не содержит подстроки: {exp_res}")
 
-    def get_product_card(self, index):
+    def get_product_card_by_index(self, index):
         product_cards_list = self.browser.find_elements(*CataloguePageLocators.PRODUCT_CARD)
         card_1 = product_cards_list[index]
         price = self.get_product_price(card_1)
-        print()
-        print(price)
 
-    def get_product_price(self, locator):
-        price_data_list = self.get_price_data(locator)
-        price = None
-        if len(price_data_list) == 1:
-            price = f"Цена {price_data_list[0]}"
-        elif len(price_data_list) == 4:
-            price = price_data_list[1][:-1]
+
+    def get_product_price(self, locator): # актуальная цена товара
+        try:
+            price_data_list = self.get_price_data(locator)
+            price = None
+            if len(price_data_list) == 1:
+                price = f"Цена {price_data_list[0]}"
+            elif len(price_data_list) == 4:
+                price = price_data_list[1][:-1]
+        except NoSuchElementException:
+            return None
         return price
 
-    def get_price_data(self, locator):
+    @staticmethod
+    def get_price_data(locator): # весь блок информации о цене (в т.ч. бонусы и цена без скидки)
         try:
             price = locator.find_element(*CataloguePageLocators.PRODUCT_CARD_PRICE).text
             price = price.split("\n")
