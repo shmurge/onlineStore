@@ -15,6 +15,7 @@ class TestProfilePagePositive:
     def test_should_be_correct_email_and_username_in_profile_card(self, browser, preconditions_login):
         page = ProfilePage(browser, self.link)
         page.open(self.link)
+        page.check_cooke_alert()
         page.should_be_correct_email_in_profile_card()
         page.should_be_correct_username_in_profile_card()
 

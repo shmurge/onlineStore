@@ -56,6 +56,7 @@ def login_in_app(browser, link=Url.MAIN_PAGE):
     with allure.step("Предусловия: авторизация"):
         page = LoginPage(browser, link)
         page.open(link)
+        page.check_cooke_alert()
         page.go_to_login_page()
         page.user_login(*UsersData.USER_1)
         page.should_be_user_link()

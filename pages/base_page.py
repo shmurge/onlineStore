@@ -4,6 +4,9 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException,
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains as AC
+
+from elements.base_elements import Button
+from locators.locs_base_page import BasePageLocators
 from time import sleep
 
 
@@ -13,6 +16,8 @@ class BasePage:
         self.browser = browser
         self.url = url
         self.browser.implicitly_wait(timeout)
+
+        self.cookie_apply_button = Button(self.browser, "Кнопка: Принять куки", *BasePageLocators.COOKIE_ALERT_APPLY_BUTTON)
 
     def open(self, url):
         with allure.step(f'Открыть страницу {url}'):
@@ -129,3 +134,11 @@ class BasePage:
         with allure.step("Проверка корректности url"):
             assert exp_res in self.browser.current_url, (f'Текущий url: {self.browser.current_url} '
                                                          f'должен содержать подстроку: {exp_res}')
+
+    def check_cooke_alert(self):
+        try:
+            self.browser.find_element(*BasePageLocators.COOKIE_ALERT)
+            with allure.step("Принять куки"):
+                self.cookie_apply_button.click()
+        except NoSuchElementException:
+            pass

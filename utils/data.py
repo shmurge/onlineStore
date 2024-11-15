@@ -36,8 +36,6 @@ class Catalogue:
                       ["Смартфоны Infinix", "Infinix"], ["Смартфоны OnePlus", "OnePlus"], ["Смартфоны Huawei", "Huawei"],
                       ["Смартфоны Tecno", "Tecno"], ["Смартфоны Vivo", "Vivo"], ["Смартфоны Blackview", "Blackview"],
                       ["Смартфоны Oppo", "Oppo"], ["Смартфоны Nothing", "Nothing"]],
-        "Сотовые телефоны и телефония": [["Кнопочный Digma", "Digma"], ["Кнопочный Nokia", "Nokia"],
-                                         ["Кнопочный Philips", "Philips"], ["Радиотелефоны", "Радиотелефон"]],
         "Планшеты, ноутбуки и электронные книги": [["Планшеты", "Планшет"],["Samsung", "Планшет Samsung"],
                                                    ["Huawei", "Планшет Huawei"], ["Digma", "Планшет Digma"],
                                                    ["Ноутбуки", "Ноутбук"], ["ASUS", "Asus"], ["Lenovo", "Lenovo"],

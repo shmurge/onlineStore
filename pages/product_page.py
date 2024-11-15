@@ -15,4 +15,15 @@ class ProductPage(HeaderPage):
     def __init__(self, browser, url, timeout=10):
         super().__init__(browser, url, timeout)
 
+    def should_be_correct_product_title_on_prod_page(self, exp_res):
+        with allure.step("Сравнение наименования товара в карточке и на странице товара"):
+            act_res = self.browser.find_element(*ProductPageLocators.PRODUCT_TITLE).text
+            assert exp_res in act_res, (f"Некорректное наименование товара!"
+                                        f"В карточке: {exp_res}, на странице товара: {act_res}")
+
+    def should_be_correct_product_price_on_prod_page(self, exp_res):
+        with allure.step("Сравнение стоимости товара в карточке и на странице товара"):
+            act_res = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text
+            assert act_res in exp_res, (f"Некорректная стоимость товара!"
+                                        f"В карточке: {exp_res}, на странице товара: {act_res}")
 
