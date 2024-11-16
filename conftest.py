@@ -13,7 +13,6 @@ def pytest_addoption(parser):
     parser.addoption('--headless', action='store_true', help='Launching the browser in headless mode')
     parser.addoption('--login', action='store_true', help='Launching the browser with pre conditions: login')
 
-
 @pytest.fixture(scope="function")
 def browser(request):
     browser_name = request.config.getoption("browser")
@@ -56,7 +55,6 @@ def login_in_app(browser, link=Url.MAIN_PAGE):
     with allure.step("Предусловия: авторизация"):
         page = LoginPage(browser, link)
         page.open(link)
-        page.check_cooke_alert()
         page.go_to_login_page()
         page.user_login(*UsersData.USER_1)
         page.should_be_user_link()
@@ -69,3 +67,4 @@ def preconditions_login(browser, link=Url.MAIN_PAGE):
 def get_browser_language(browser):
     browser_language = browser.execute_script("return navigator.language").upper()
     return browser_language
+

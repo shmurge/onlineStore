@@ -1,4 +1,5 @@
 import allure
+import pytest
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, ElementNotVisibleException
 from selenium.webdriver.support import expected_conditions as EC
@@ -135,9 +136,9 @@ class BasePage:
             assert exp_res in self.browser.current_url, (f'Текущий url: {self.browser.current_url} '
                                                          f'должен содержать подстроку: {exp_res}')
 
-    def check_cooke_alert(self):
+    def check_cookie_alert(self):
         try:
-            self.browser.find_element(*BasePageLocators.COOKIE_ALERT)
+            self.is_element_visible(*BasePageLocators.COOKIE_ALERT)
             with allure.step("Принять куки"):
                 self.cookie_apply_button.click()
         except NoSuchElementException:

@@ -15,7 +15,7 @@ class TestProfilePagePositive:
     def test_should_be_correct_email_and_username_in_profile_card(self, browser, preconditions_login):
         page = ProfilePage(browser, self.link)
         page.open(self.link)
-        page.check_cooke_alert()
+        page.check_cookie_alert()
         page.should_be_correct_email_in_profile_card()
         page.should_be_correct_username_in_profile_card()
 
@@ -23,6 +23,7 @@ class TestProfilePagePositive:
     @allure.title("Пользователь может выйти из аккаунта")
     def test_user_can_logout_of_the_account(self, browser, preconditions_login):
         page = ProfilePage(browser, self.link)
+        page.check_cookie_alert()
         page.open(self.link)
         page.logout()
         page.should_be_login_link()
@@ -33,6 +34,7 @@ class TestProfilePagePositive:
     @pytest.mark.may_be_login
     def test_choose_region_from_profile_page(self, browser, region, preconditions_login):
         page = RegionPage(browser, self.link)
+        page.check_cookie_alert()
         page.open(self.link)
         page.open_region_modal()
         page.choose_region(region)
