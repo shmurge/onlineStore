@@ -52,5 +52,4 @@ class Catalogue:
         }
 
     PRODUCT_LIST = ["Xiaomi Redmi Note 13 Pro", "iPhone 15", "Huawei Matepad SE 11", "Samsung Galaxy Tab S9",
-                    "Ноутбук Asus Vivobook", "Ноутбук Asus Zenbook", "Ноутбук HP EliteBook", "Ноутбук HP ProBook",
-                    "Xiaomi Mi Smart Band 9"]
+                    "Ноутбук Apple", "Xiaomi Redmi Smart Band Pro Global Black", "Samsung Galaxy Tab"]

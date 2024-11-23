@@ -26,46 +26,29 @@ class SearchingResultPage(HeaderPage):
                                                             f"Товар: {el.text} не содержит подстроки: {exp_res}")
 
     def select_random_product_card(self):
-        prod_card = self.get_random_product_card_with_in_stock_status()
-        prod_title = self.get_product_title(prod_card)
-        prod_price = self.get_product_price(prod_card)
-        self.scroll_to_card(prod_card, prod_title)
-        sleep(3)
-        with allure.step(f"Клик по карточке товара: {prod_title}"):
-            prod_card.click()
-        return prod_title, prod_price
+        prod_card, index = self.get_random_product_card_with_in_stock_status()
+        prod_title = self.browser.find_element(*SearchingResultPageLocators.construction_title_locator(index))
+        prod_price = (
+            self.browser.find_element(*SearchingResultPageLocators.construction_price_locator(index)).text.strip())
+        self.scroll_to_card(prod_card, prod_title.text.strip())
+        with allure.step(f"Клик по карточке товара: {prod_title.text}"):
+            self.waiting_element_clickable(prod_title)
+            prod_title.click()
+        return prod_title.text.strip(), f"Цена {prod_price}"
 
     def get_random_product_card_with_in_stock_status(self):
         with allure.step("Выбор произвольной карточки товара со статусом 'В наличии'"):
             self.is_element_visible(*SearchingResultPageLocators.PRODUCT_CARD)
             prod_cards_list = self.browser.find_elements(*SearchingResultPageLocators.PRODUCT_CARD)
-            flag = True
-            count = 0
-            while flag:
-                prod_card = choice(prod_cards_list)
-                info_list_in_prod_card = self.get_info_from_prod_card(prod_card)
-                for info in info_list_in_prod_card:
-                    if info.lower() == "купить":
-                        flag = False
-                        break
-                count += 1
-                if count == 100:
-                    flag = False
-            return prod_card
+            assert len(prod_cards_list) != 0, "На странице нет ни одного товара со статусом 'В наличии'"
+            index = randrange(0, len(prod_cards_list))
+            prod_card = prod_cards_list[index]
+            return prod_card, index+1
 
-    @staticmethod
-    def get_info_from_prod_card(element):
-        info_list = element.text.split("\n")
-        return info_list
-
-    def get_product_title(self, element):
-        title = self.get_info_from_prod_card(element)[1]
-        return title.strip()
-
-    def get_product_price(self, element): # актуальная цена товара
-        prod_info = self.get_info_from_prod_card(element)
-        price = f"Цена {prod_info[4]}"
-        return price.strip()
+    # @staticmethod
+    # def get_info_from_prod_card(element):
+    #     info_list = element.text.split("\n")
+    #     return info_list
 
     def scroll_to_card(self, card, name):
         self.is_element_visible(*SearchingResultPageLocators.PRODUCT_CARD)

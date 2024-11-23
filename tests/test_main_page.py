@@ -82,7 +82,7 @@ class TestMainPagePositive:
     @allure.suite("Поиск товара")
     @allure.title("Главная: Пользователь может найти товар через поиск и перейти на страницу этого товара")
     @pytest.mark.parametrize("product_name", [*Catalogue.PRODUCT_LIST])
-    @pytest.mark.xfail
+    @pytest.mark.test
     def test_user_can_find_product_and_go_to_prod_page(self, browser, product_name):
         page = HeaderPage(browser, self.link)
         page.open(self.link)
@@ -97,7 +97,6 @@ class TestMainPagePositive:
 
     @allure.suite("Поиск товара")
     @allure.title("Главная: Пользователь может выбрать товар в каталоге и перейти на страницу этого товара")
-    @pytest.mark.test
     def test_user_can_select_product_in_catalogue_and_go_to_prod_page(self, browser):
         item_type = choice(list(Catalogue.CATALOGUE))
         item = choice(Catalogue.CATALOGUE[item_type])
@@ -134,3 +133,5 @@ class TestMainPageNegative:
         page.select_product_in_catalogue(item_type, item_link)
         page = CataloguePage(browser, browser.current_url)
         page.check_searching_result(item_name)
+
+
