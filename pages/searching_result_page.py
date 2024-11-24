@@ -34,7 +34,7 @@ class SearchingResultPage(HeaderPage):
                 self.browser.find_element(*SearchingResultPageLocators.construction_price_locator(index)).text.strip())
             self.scroll_to_card(prod_card, prod_title.text.strip())
             with allure.step(f"Клик по карточке товара: {prod_title.text.strip()}"):
-                self.waiting_element_clickable(prod_title)
+                self.is_element_visible(*SearchingResultPageLocators.construction_title_locator(index))
                 prod_title.click()
             return prod_title.text.strip(), f"Цена {prod_price}"
 

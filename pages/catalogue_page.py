@@ -32,7 +32,7 @@ class CataloguePage(HeaderPage):
                 self.browser.find_element(*CataloguePageLocators.construction_price_locator(index)).text.strip())[:-1]
             self.scroll_to_card(prod_card, prod_title.text.strip())
             with allure.step(f"Клик по карточке товара: {prod_title.text.strip()}"):
-                self.waiting_element_clickable(prod_title)
+                self.is_element_visible(*CataloguePageLocators.construction_title_locator(index))
                 prod_card.click()
             return prod_title.text.strip(), prod_price
 
