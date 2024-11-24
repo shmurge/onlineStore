@@ -31,7 +31,6 @@ class TestProfilePagePositive:
     @allure.suite("Локализация")
     @allure.title("Профиль: Выбор региона")
     @pytest.mark.parametrize('region', ["Москва и МО", "Санкт-Петербург"])
-    @pytest.mark.may_be_login
     def test_choose_region_from_profile_page(self, browser, region, preconditions_login):
         page = RegionPage(browser, self.link)
         page.check_cookie_alert()

@@ -72,25 +72,24 @@ class BasePage:
         try:
             WebDriverWait(self.browser, timeout).until(EC.text_to_be_present_in_element(locator, text_=text))
         except TimeoutException:
-            return True
-        return False
+            return False
+        return True
 
-    def waiting_element_clickable(self, locator: tuple[str, str], timeout: float = 1.0):
+    def waiting_element_clickable(self, locator: tuple[str, str], timeout: float = 5.0):
         try:
             WebDriverWait(self.browser, timeout).until(EC.element_to_be_clickable(locator))
         except TimeoutException:
-            return True
-        return False
+            return False
+        return True
 
     def waiting_attribute_in_element(self, locator: tuple[str, str], attribute: str, timeout: float = 1.0):
         try:
             WebDriverWait(self.browser, timeout).until(EC.element_attribute_to_include(locator, attribute))
         except TimeoutException:
-            return True
-        return False
+            return False
+        return True
 
     def send_keys_in_input(self, how, what, data):
-        input_1_value = None
         actions = AC(self.browser)
         input_1 = self.browser.find_element(how, what)
         actions.double_click(input_1)
@@ -100,13 +99,11 @@ class BasePage:
             f'Incorrect data in input! Expect: "{data}", but actual: "{input_1_value}"'
 
     def search_element_by_text(self, text):
-        element = None
         with allure.step(f'Поиск элемента: {text}'):
             element = self.browser.find_element(By.XPATH, f"//*[text()='{text}']")
         return element
 
     def search_element_by_attribute_and_value(self, attribute, value):
-        element = None
         with allure.step(f'Поиск элемента по атрибуту: {attribute} и значению: {value}'):
             element = self.browser.find_element(By.XPATH, f"//*[normalize-space(@{attribute})='{value}']")
         return element
@@ -126,7 +123,6 @@ class BasePage:
             action.perform()
 
     def get_searching_result(self, how, what):  # возвращает список элементов после поиска
-        results = None
         results = self.browser.find_elements(how, what)
         return results
 

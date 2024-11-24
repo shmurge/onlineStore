@@ -16,6 +16,3 @@ class SearchingResultPageLocators:
     def construction_price_locator(index):
         return (By.XPATH, f'//*[@data-index={index}]/descendant::div[@class="b-card__price"]')
 
-    # динамические локаторы для стягивания наименования и цены
-    # //*[@data-index={N}]/descendant::a[@class="b-card__name"]
-    # //*[@data-index={N}]/descendant::div[@class="b-card__price"]

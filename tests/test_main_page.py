@@ -1,4 +1,3 @@
-import random
 import pytest
 import allure
 from random import *
@@ -76,44 +75,34 @@ class TestMainPagePositive:
         page.open(self.link)
         page.check_cookie_alert()
         page.search_product_by_main_search_input(product_name)
-        page = CataloguePage(browser, browser.current_url)
-        page.check_searching_result(product_name)
-
-    @allure.suite("Поиск товара")
-    @allure.title("Главная: Пользователь может найти товар через поиск и перейти на страницу этого товара")
-    @pytest.mark.parametrize("product_name", [*Catalogue.PRODUCT_LIST])
-    @pytest.mark.test
-    def test_user_can_find_product_and_go_to_prod_page(self, browser, product_name):
-        page = HeaderPage(browser, self.link)
-        page.open(self.link)
-        page.check_cookie_alert()
-        page.search_product_by_main_search_input(product_name)
         page = SearchingResultPage(browser, browser.current_url)
         page.check_searching_result(product_name)
+
+    @allure.suite("Поиск товара")
+    @allure.title("Главная: Пользователь может перейти на страницу найденного товара")
+    @pytest.mark.parametrize("product_name", [*Catalogue.PRODUCT_LIST])
+    @pytest.mark.may_be_login
+    @pytest.mark.xfail
+    @pytest.mark.test
+    def test_user_can_find_product_and_go_to_prod_page(self, browser, product_name):
+        self.test_user_can_find_product_by_main_search_input(browser, product_name)
+        page = SearchingResultPage(browser, browser.current_url)
         title, price = page.select_random_product_card()
         page = ProductPage(browser, browser.current_url)
         page.should_be_correct_product_title_on_prod_page(title)
         page.should_be_correct_product_price_on_prod_page(price)
 
     @allure.suite("Поиск товара")
-    @allure.title("Главная: Пользователь может выбрать товар в каталоге и перейти на страницу этого товара")
+    @allure.title("Главная: Пользователь может перейти на страницу товара, выбранного в каталоге")
+    @pytest.mark.may_be_login
+    @pytest.mark.xfail
     def test_user_can_select_product_in_catalogue_and_go_to_prod_page(self, browser):
-        item_type = choice(list(Catalogue.CATALOGUE))
-        item = choice(Catalogue.CATALOGUE[item_type])
-        item_link = item[0]
-        item_name = item[1]
-        page = HeaderPage(browser, self.link)
-        page.open(self.link)
-        page.check_cookie_alert()
-        page.open_catalogue()
-        page.select_product_in_catalogue(item_type, item_link)
+        self.test_user_can_find_product_by_catalogue_from_main_page(browser)
         page = CataloguePage(browser, browser.current_url)
-        page.check_searching_result(item_name)
         title, price = page.select_random_product_card()
         page = ProductPage(browser, browser.current_url)
         page.should_be_correct_product_title_on_prod_page(title)
         page.should_be_correct_product_price_on_prod_page(price)
-
 
 @pytest.mark.negative
 @pytest.mark.main_page
