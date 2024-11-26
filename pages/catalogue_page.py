@@ -30,10 +30,10 @@ class CataloguePage(HeaderPage):
             prod_title = self.browser.find_element(*CataloguePageLocators.construction_title_locator(index))
             prod_price = (# парсим цену без точки в конце
                 self.browser.find_element(*CataloguePageLocators.construction_price_locator(index)).text.strip())[:-1]
-            self.scroll_to_card(prod_card, prod_title.text.strip())
+            self.scroll_to_card(prod_title, prod_title.text.strip())
             with allure.step(f"Клик по карточке товара: {prod_title.text.strip()}"):
-                self.is_element_visible(*CataloguePageLocators.construction_title_locator(index))
-                prod_card.click()
+                if prod_title.is_displayed():
+                    prod_card.click()
             return prod_title.text.strip(), prod_price
 
     def get_random_product_card_with_in_stock_status(self):

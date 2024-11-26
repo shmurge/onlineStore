@@ -28,18 +28,18 @@ class SearchingResultPage(HeaderPage):
     def select_random_product_card(self):
         with (allure.step(
             "Выбор произвольной карточки товара со статусом 'В наличии' на странице с результатом поиска")):
+            self.is_element_visible(*SearchingResultPageLocators.PRODUCT_CARD)
             prod_card, index = self.get_random_product_card_with_in_stock_status()
             prod_title = self.browser.find_element(*SearchingResultPageLocators.construction_title_locator(index))
             prod_price = (
                 self.browser.find_element(*SearchingResultPageLocators.construction_price_locator(index)).text.strip())
-            self.scroll_to_card(prod_card, prod_title.text.strip())
+            self.scroll_to_card(prod_title, prod_title.text.strip())
             with allure.step(f"Клик по карточке товара: {prod_title.text.strip()}"):
-                self.is_element_visible(*SearchingResultPageLocators.construction_title_locator(index))
-                prod_title.click()
-            return prod_title.text.strip(), f"Цена {prod_price}"
+                if prod_title.is_displayed():
+                    prod_title.click()
+            return prod_title.text.strip(), f"{SearchingResultPageLocators.PRICE_PREFIX} {prod_price}"
 
     def get_random_product_card_with_in_stock_status(self):
-        self.is_element_visible(*SearchingResultPageLocators.PRODUCT_CARD)
         prod_cards_list = self.browser.find_elements(*SearchingResultPageLocators.PRODUCT_CARD)
         assert len(prod_cards_list) != 0, \
             "На странице с результатом поиска нет ни одного товара со статусом 'В наличии'"
@@ -48,7 +48,6 @@ class SearchingResultPage(HeaderPage):
         return prod_card, index+1
 
     def scroll_to_card(self, card, name):
-        self.is_element_visible(*SearchingResultPageLocators.PRODUCT_CARD)
         with allure.step(f"Проскроллить до товара: {name}"):
             action = AC(self.browser)
             action.scroll_to_element(card)

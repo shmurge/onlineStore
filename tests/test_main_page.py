@@ -1,6 +1,7 @@
 import pytest
 import allure
 from random import *
+from pages.cart_page import CartPage
 from pages.header_page import HeaderPage
 from pages.login_page import LoginPage
 from pages.main_page import MainPage
@@ -83,7 +84,6 @@ class TestMainPagePositive:
     @pytest.mark.parametrize("product_name", [*Catalogue.PRODUCT_LIST])
     @pytest.mark.may_be_login
     @pytest.mark.xfail
-    @pytest.mark.test
     def test_user_can_find_product_and_go_to_prod_page(self, browser, product_name):
         self.test_user_can_find_product_by_main_search_input(browser, product_name)
         page = SearchingResultPage(browser, browser.current_url)
@@ -91,6 +91,19 @@ class TestMainPagePositive:
         page = ProductPage(browser, browser.current_url)
         page.should_be_correct_product_title_on_prod_page(title)
         page.should_be_correct_product_price_on_prod_page(price)
+
+    @allure.suite("Корзина")
+    @allure.title("Главная: Пользователь может перейти на страницу корзины "
+                  "и увидеть сообщение, если в корзине нет товаров")
+    @pytest.mark.may_be_login
+    def test_user_must_see_message_if_cart_is_empty(self, browser):
+        page = CartPage(browser, self.link)
+        page.open(self.link)
+        page.check_cookie_alert()
+        page.go_to_cart_page()
+        page.should_be_cart_page()
+        page.should_be_message_empty_cart()
+
 
     @allure.suite("Поиск товара")
     @allure.title("Главная: Пользователь может перейти на страницу товара, выбранного в каталоге")

@@ -1,12 +1,13 @@
 import allure
 from selenium.webdriver.common.action_chains import ActionChains as AC
-from locators.locs_region_page import RegionPageLocators
 from pages.base_page import BasePage
 from elements.base_elements import *
 from locators.locs_header_page import HeaderPageLocators
 from locators.locs_login_page import LoginPageLocators
+from locators.locs_region_page import RegionPageLocators
 from locators.locs_profile_page import ProfilePageLocators
 from locators.locs_product_page import ProductPageLocators
+from locators.locs_cart_page import CartPageLocators
 from utils.data import *
 from selenium.webdriver.common.by import By
 
@@ -33,6 +34,9 @@ class HeaderPage(BasePage):
         # profile
         self.profile_link = Button(self.browser, "Ссылка на профиль юзера", *HeaderPageLocators.USER_LINK)
 
+        # cart
+        self.cart_button = Button(self.browser, "Кнопка Корзина", *HeaderPageLocators.CART_BUTTON)
+
     def go_to_login_page(self):
         with allure.step("Переход на страницу логина"):
             self.login_link.click()
@@ -57,7 +61,12 @@ class HeaderPage(BasePage):
 
     def should_be_login_link(self):
         with allure.step("Проверка наличия ссылки на страницу авторизации"):
-            self.is_element_visible(*HeaderPageLocators.LOGIN_LINK)
+            assert self.is_element_visible(*HeaderPageLocators.LOGIN_LINK), \
+                "Ссылка на личный кабинет пользователя не отображается!"
+
+    def go_to_profile_page(self):
+        with allure.step("Переход на страницу профиля"):
+            self.profile_link.click()
 
     def open_region_modal(self):
         with allure.step("Открыть модалку выбора региона"):
@@ -102,14 +111,11 @@ class HeaderPage(BasePage):
                 element = el
         return element
 
-    # def check_searching_result(self, exp_res):
-    #     with allure.step(f"Проверка результатов поиска товара: {exp_res}"):
-    #         product_list = self.browser.find_elements(*ProductsListPageLocators.PRODUCT_TITLE)
-    #         for el in product_list:
-    #             assert exp_res.lower() in el.text.lower(), (f"Некорректный результат поиска в списке товаров! "
-    #                                                         f"Товар: {el.text} не содержит подстроки: {exp_res}")
-
     def search_product_by_main_search_input(self, data):
-        with allure.step("Главная: Поиск товара через инпут поиска в хэдере"):
+        with allure.step("Поиск товара через инпут поиска в хэдере"):
             self.main_input.send_keys_in_input(data)
             self.main_search_button.click()
+
+    def go_to_cart_page(self):
+        with allure.step("Перейти в Корзину"):
+            self.cart_button.click()

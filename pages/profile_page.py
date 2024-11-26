@@ -13,13 +13,9 @@ class ProfilePage(HeaderPage):
 
         self.logout_button = Button(self.browser, "Кнопка Выйти из аккаунта", *ProfilePageLocators.LOGOUT_BUTTON)
 
-    def go_to_profile_page(self):
-        with allure.step("Переход на страницу профиля"):
-            self.profile_link.click()
-
     def should_be_profile_page(self):
         with allure.step("Проверка наличия страницы профиля"):
-            self.should_be_correct_url("profile")
+            self.should_be_correct_url(ProfilePageLocators.PROFILE_PATH_PARAM)
             self.should_be_profile_card()
 
     def should_be_profile_card(self):
