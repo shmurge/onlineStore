@@ -15,6 +15,8 @@ class ProductPage(HeaderPage):
     def __init__(self, browser, url, timeout=10):
         super().__init__(browser, url, timeout)
 
+        self.buy_button = Button(self.browser, "Кнопка Купить", *ProductPageLocators.BUY_BUTTON)
+
     def should_be_correct_product_title_on_prod_page(self, exp_res):
         with allure.step("Сравнение наименования товара в карточке и на странице товара"):
             act_res = self.browser.find_element(*ProductPageLocators.PRODUCT_TITLE).text.strip()
@@ -26,4 +28,17 @@ class ProductPage(HeaderPage):
             act_res = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text.strip()
             assert act_res.lower() in exp_res.lower(), (f"Некорректная стоимость товара!"
                                         f"В карточке: {exp_res}, на странице товара: {act_res}")
+
+    def get_title_and_price(self):
+        prod_title = self.browser.find_element(*ProductPageLocators.PRODUCT_TITLE).text
+        prod_price = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text
+        print()
+        print(prod_title, prod_price, sep="\n")
+        return prod_title, prod_price
+
+    def add_to_cart(self, title):
+        with allure.step(f"Добавить в корзину това: {title}"):
+            self.scroll_to_element(*ProductPageLocators.BUY_BUTTON, title)
+            sleep(1)
+            self.buy_button.click()
 

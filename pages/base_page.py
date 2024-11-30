@@ -122,6 +122,13 @@ class BasePage:
             action.move_to_element(element)
             action.perform()
 
+    def scroll_to_element(self, how, what, name):
+        with allure.step(f"Проскроллить страницу до элемента {name}"):
+            element = self.browser.find_element(how, what)
+            action = AC(self.browser)
+            action.scroll_to_element(element)
+            action.perform()
+
     def get_searching_result(self, how, what):  # возвращает список элементов после поиска
         results = self.browser.find_elements(how, what)
         return results

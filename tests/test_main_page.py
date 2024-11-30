@@ -10,6 +10,7 @@ from pages.profile_page import ProfilePage
 from pages.catalogue_page import CataloguePage
 from pages.searching_result_page import SearchingResultPage
 from pages.product_page import ProductPage
+from pages.product_added_modal_page import ProductAddedModal
 from utils.data import *
 from time import sleep
 
@@ -21,8 +22,8 @@ class TestMainPagePositive:
 
     @allure.severity(allure.severity_level.CRITICAL)
     @allure.suite("Авторизация")
-    @allure.title("Главная: Пользователь может авторизоваться в приложении")
-    def test_user_can_login_in_app_from_main_page(self, browser):
+    @allure.title("Главная: Авторизация")
+    def test_authorize(self, browser):
         page = LoginPage(browser, self.link)
         page.open(self.link)
         page.check_cookie_alert()
@@ -34,7 +35,7 @@ class TestMainPagePositive:
     @allure.title("Главная: Выбор региона")
     @pytest.mark.parametrize('region', ["Москва и МО", "Санкт-Петербург"])
     @pytest.mark.may_be_login
-    def test_choose_region_from_main_page(self, browser, region):
+    def test_choose_region(self, browser, region):
         page = RegionPage(browser, self.link)
         page.open(self.link)
         page.check_cookie_alert()
@@ -43,17 +44,17 @@ class TestMainPagePositive:
         page.should_be_correct_region_in_header(region)
 
     @allure.suite("Профиль пользователя")
-    @allure.title("Главная: Авторизованный пользователь может перейти в свой профиль")
-    def test_authorized_user_can_go_to_profile_page_from_main_page(self, browser, preconditions_login):
+    @allure.title("Главная: Перход в профиль")
+    def test_go_to_profile_page(self, browser, preconditions_login):
         page = ProfilePage(browser, self.link)
         page.check_cookie_alert()
         page.go_to_profile_page()
         page.should_be_profile_page()
 
     @allure.suite("Поиск товара")
-    @allure.title("Главная: Пользователь может найти товар через каталог")
+    @allure.title("Главная: Поиск товара через каталог")
     @pytest.mark.may_be_login
-    def test_user_can_find_product_by_catalogue_from_main_page(self, browser):
+    def test_search_by_catalogue(self, browser):
         item_type = choice(list(Catalogue.CATALOGUE))
         item = choice(Catalogue.CATALOGUE[item_type])
         item_link = item[0]
@@ -67,11 +68,23 @@ class TestMainPagePositive:
         page.check_searching_result(item_name)
 
     @allure.suite("Поиск товара")
-    @allure.title("Главная: Пользователь может найти товар главный инпут поиска")
-    @pytest.mark.parametrize("product_name", Catalogue.PRODUCT_LIST)
+    @allure.title("Главная: Переход на страницу товара из каталога")
     @pytest.mark.may_be_login
     @pytest.mark.xfail
-    def test_user_can_find_product_by_main_search_input(self, browser, product_name):
+    def test_go_to_prod_page_from_catalogue(self, browser):
+        self.test_search_by_catalogue(browser)
+        page = CataloguePage(browser, browser.current_url)
+        title, price = page.select_random_product_card()
+        page = ProductPage(browser, browser.current_url)
+        page.should_be_correct_product_title_on_prod_page(title)
+        page.should_be_correct_product_price_on_prod_page(price)
+
+    @allure.suite("Поиск товара")
+    @allure.title("Главная: Поиск товара через главный инпут поиска")
+    @pytest.mark.parametrize("product_name", ProductName.PRODUCT_NAMES_LIST)
+    @pytest.mark.may_be_login
+    @pytest.mark.xfail
+    def test_search_by_main_search_input(self, browser, product_name):
         page = HeaderPage(browser, self.link)
         page.open(self.link)
         page.check_cookie_alert()
@@ -80,12 +93,12 @@ class TestMainPagePositive:
         page.check_searching_result(product_name)
 
     @allure.suite("Поиск товара")
-    @allure.title("Главная: Пользователь может перейти на страницу найденного товара")
-    @pytest.mark.parametrize("product_name", [*Catalogue.PRODUCT_LIST])
+    @allure.title("Главная: Переход на страницу товара со страницы поиска")
+    @pytest.mark.parametrize("product_name", [*ProductName.PRODUCT_NAMES_LIST])
     @pytest.mark.may_be_login
     @pytest.mark.xfail
-    def test_user_can_find_product_and_go_to_prod_page(self, browser, product_name):
-        self.test_user_can_find_product_by_main_search_input(browser, product_name)
+    def test_go_to_prod_page_from_searching_result_page(self, browser, product_name):
+        self.test_search_by_main_search_input(browser, product_name)
         page = SearchingResultPage(browser, browser.current_url)
         title, price = page.select_random_product_card()
         page = ProductPage(browser, browser.current_url)
@@ -93,29 +106,53 @@ class TestMainPagePositive:
         page.should_be_correct_product_price_on_prod_page(price)
 
     @allure.suite("Корзина")
-    @allure.title("Главная: Пользователь может перейти на страницу корзины "
-                  "и увидеть сообщение, если в корзине нет товаров")
+    @allure.title("Главная: Переход в корзину")
     @pytest.mark.may_be_login
-    def test_user_must_see_message_if_cart_is_empty(self, browser):
+    def test_go_to_cart_page(self, browser):
         page = CartPage(browser, self.link)
         page.open(self.link)
         page.check_cookie_alert()
         page.go_to_cart_page()
         page.should_be_cart_page()
+
+    @allure.suite("Корзина")
+    @allure.title("Главная: Проверка наличия сообщения о пустой корзине")
+    @pytest.mark.may_be_login
+    def test_check_empty_cart_message(self, browser):
+        page = CartPage(browser, self.link)
+        page.open(self.link)
+        page.check_cookie_alert()
+        page.go_to_cart_page()
         page.should_be_message_empty_cart()
 
-
-    @allure.suite("Поиск товара")
-    @allure.title("Главная: Пользователь может перейти на страницу товара, выбранного в каталоге")
+    @allure.suite("Корзина")
+    @allure.title("Главная/каталог: Добаить товар в корзину со станицы товара и продолжить покупки")
     @pytest.mark.may_be_login
-    @pytest.mark.xfail
-    def test_user_can_select_product_in_catalogue_and_go_to_prod_page(self, browser):
-        self.test_user_can_find_product_by_catalogue_from_main_page(browser)
-        page = CataloguePage(browser, browser.current_url)
-        title, price = page.select_random_product_card()
-        page = ProductPage(browser, browser.current_url)
-        page.should_be_correct_product_title_on_prod_page(title)
-        page.should_be_correct_product_price_on_prod_page(price)
+    @pytest.mark.test
+    def test_add_to_cart_from_prod_page_from_catalogue_and_continue_shopping(self, browser):
+        self.test_go_to_prod_page_from_catalogue(browser)
+        product_page = ProductPage(browser, browser.current_url)
+        prod_title, prod_price = product_page.get_title_and_price()
+        product_page.add_to_cart(prod_title)
+        product_added_modal = ProductAddedModal(browser, browser.current_url)
+        product_added_modal.should_be_buy_options_modal()
+        product_added_modal.continue_shopping()
+        sleep(7)
+
+    @allure.suite("Корзина")
+    @allure.title("Главная/каталог: Добаить товар в корзину со станицы товара и перейти к оформлению")
+    @pytest.mark.may_be_login
+    @pytest.mark.test
+    def test_add_to_cart_from_prod_page_from_catalogue_and_place_an_order(self, browser):
+        self.test_go_to_prod_page_from_catalogue(browser)
+        product_page = ProductPage(browser, browser.current_url)
+        prod_title, prod_price = product_page.get_title_and_price()
+        product_page.add_to_cart(prod_title)
+        product_added_modal = ProductAddedModal(browser, browser.current_url)
+        product_added_modal.should_be_buy_options_modal()
+        product_added_modal.place_an_order()
+        sleep(7)
+
 
 @pytest.mark.negative
 @pytest.mark.main_page
@@ -135,5 +172,3 @@ class TestMainPageNegative:
         page.select_product_in_catalogue(item_type, item_link)
         page = CataloguePage(browser, browser.current_url)
         page.check_searching_result(item_name)
-
-

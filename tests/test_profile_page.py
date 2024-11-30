@@ -11,7 +11,7 @@ class TestProfilePagePositive:
     link = Url.PROFILE_PAGE
 
     @allure.suite("Профиль пользователя")
-    @allure.title("В карточке профиля email и имя пользователя должны быть корректными")
+    @allure.title("Проверка корректности email и имени пользователя в карточке профиля")
     def test_should_be_correct_email_and_username_in_profile_card(self, browser, preconditions_login):
         page = ProfilePage(browser, self.link)
         page.open(self.link)
@@ -20,7 +20,7 @@ class TestProfilePagePositive:
         page.should_be_correct_username_in_profile_card()
 
     @allure.suite("Профиль пользователя")
-    @allure.title("Пользователь может выйти из аккаунта")
+    @allure.title("Выход из аккаунта")
     def test_user_can_logout_of_the_account(self, browser, preconditions_login):
         page = ProfilePage(browser, self.link)
         page.check_cookie_alert()
