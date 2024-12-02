@@ -24,3 +24,8 @@ class CartPage(HeaderPage):
         with allure.step("Проверить отображение сообщения о пустой корзине"):
             message = self.browser.find_element(*CartPageLocators.EMPTY_CART_MESSAGE).is_displayed()
             assert message, "Не отображается сообщение 'Корзина пуста'!"
+
+    def check_product_position_in_cart(self, *args):
+        title_list =[elem.text for elem in self.browser.find_elements(*CartPageLocators.PROD_TITLE)]
+        for arg in args:
+            assert arg not in title_list, f"Добавленный товар: {arg} не отображается в корзине!"

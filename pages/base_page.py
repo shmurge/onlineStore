@@ -61,9 +61,9 @@ class BasePage:
             return False
         return True
 
-    def is_not_element_visible(self, how, what):
+    def is_not_element_visible(self, how, what, timeout=10, freq=0.5):
         try:
-            WebDriverWait(self.browser, 10, 0.5).until_not(EC.visibility_of_element_located((how, what)))
+            WebDriverWait(self.browser, timeout, freq).until_not(EC.visibility_of_element_located((how, what)))
         except TimeoutException:
             return False
         return True
@@ -129,20 +129,24 @@ class BasePage:
             action.scroll_to_element(element)
             action.perform()
 
-    def get_searching_result(self, how, what):  # возвращает список элементов после поиска
-        results = self.browser.find_elements(how, what)
-        return results
-
     def should_be_correct_url(self, exp_res):
         with allure.step("Проверка корректности url"):
             assert exp_res in self.browser.current_url, (f'Текущий url: {self.browser.current_url} '
                                                          f'должен содержать подстроку: {exp_res}')
 
+    # def check_cookie_alert(self):
+    #     try:
+    #         self.is_element_visible(*BasePageLocators.COOKIE_ALERT)
+    #         with allure.step("Принять куки"):
+    #             self.cookie_apply_button.click()
+    #     except NoSuchElementException:
+    #         pass
+
     def check_cookie_alert(self):
-        try:
-            self.is_element_visible(*BasePageLocators.COOKIE_ALERT)
+        self.browser.implicitly_wait(3)
+        alert = self.browser.find_element(*BasePageLocators.COOKIE_ALERT).is_displayed()
+        if alert:
             with allure.step("Принять куки"):
                 self.cookie_apply_button.click()
-        except NoSuchElementException:
-            pass
+
 

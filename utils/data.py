@@ -47,9 +47,7 @@ class Catalogue:
                        ["Зарядные устройства Samsung", "Сетевое зарядное устройство Samsung"],
                        ["Чехлы для планшетов", "Чехол"], ["Защитные стекла для планшетов", "Защитное стекло"],
                        ["Защитные пленки для планшетов", "Защитная пленка"]],
-        "Умные часы и браслеты": [["Xiaomi Mi Band 8", "Xiaomi Mi Smart Band 8"],
-                                  ["Xiaomi Mi Band 9", "Xiaomi Mi Smart Band 9"], ["Honor Band 9", "Honor Band 9"]],
-        }
+        "Умные часы и браслеты": [["Xiaomi Mi Band 9", "Xiaomi Mi Smart Band 9"], ["Honor Band 9", "Honor Band 9"]]}
 
 class ProductName:
     PRODUCT_NAMES_LIST = ["Xiaomi Redmi Note 13 Pro", "iPhone 15", "Huawei Matepad SE 11", "Ноутбук Apple",

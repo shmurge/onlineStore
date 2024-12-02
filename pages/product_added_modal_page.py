@@ -28,6 +28,7 @@ class ProductAddedModal(HeaderPage):
 
     def place_an_order(self):
         with allure.step("Перейти в корзину для оформления заказа"):
+            self.is_element_visible(*ProductAddedModalLocators.PRODUCT_ADDED_MODAL_PLACE_AN_ORDER_BUTTON)
             self.place_an_order_button.click()
 
     def continue_shopping(self):

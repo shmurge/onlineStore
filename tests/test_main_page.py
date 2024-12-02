@@ -131,13 +131,16 @@ class TestMainPagePositive:
     @pytest.mark.test
     def test_add_to_cart_from_prod_page_from_catalogue_and_continue_shopping(self, browser):
         self.test_go_to_prod_page_from_catalogue(browser)
+        quantity = 0
         product_page = ProductPage(browser, browser.current_url)
         prod_title, prod_price = product_page.get_title_and_price()
         product_page.add_to_cart(prod_title)
+        quantity += 1
         product_added_modal = ProductAddedModal(browser, browser.current_url)
         product_added_modal.should_be_buy_options_modal()
         product_added_modal.continue_shopping()
-        sleep(7)
+        product_page.check_quantity_positions_in_cart(quantity)
+        sleep(3)
 
     @allure.suite("Корзина")
     @allure.title("Главная/каталог: Добаить товар в корзину со станицы товара и перейти к оформлению")
@@ -151,7 +154,35 @@ class TestMainPagePositive:
         product_added_modal = ProductAddedModal(browser, browser.current_url)
         product_added_modal.should_be_buy_options_modal()
         product_added_modal.place_an_order()
-        sleep(7)
+        sleep(3)
+
+    def test_add_to_cart_from_prod_page_from_catalogue_and_place_an_order_1(self, browser):
+        cat_page = CataloguePage(browser, self.link)
+        product_page = ProductPage(browser, browser.current_url)
+        cat_page.open(self.link)
+        cat_page.check_cookie_alert()
+        cat_page.open_catalogue()
+        cat_page.select_product_in_catalogue("Смартфоны", "Смартфоны Xiaomi")
+        cat_page.select_random_product_card()
+        prod_title, prod_price = product_page.get_title_and_price()
+        product_page.add_to_cart(prod_title)
+        product_added_modal = ProductAddedModal(browser, browser.current_url)
+        product_added_modal.should_be_buy_options_modal()
+        product_added_modal.continue_shopping()
+
+        cat_page.open_catalogue()
+        cat_page.select_product_in_catalogue("Смартфоны", "Смартфоны Xiaomi")
+        cat_page.select_random_product_card()
+        prod_title, prod_price = product_page.get_title_and_price()
+        product_page.add_to_cart(prod_title)
+        product_added_modal = ProductAddedModal(browser, browser.current_url)
+        product_added_modal.should_be_buy_options_modal()
+        product_added_modal.place_an_order()
+        sleep(15)
+
+        cart_page = CartPage(browser, browser.current_url)
+        cart_page.check_product_position_in_cart()
+
 
 
 @pytest.mark.negative

@@ -119,3 +119,8 @@ class HeaderPage(BasePage):
     def go_to_cart_page(self):
         with allure.step("Перейти в Корзину"):
             self.cart_button.click()
+
+    def check_quantity_positions_in_cart(self, exp_res):
+        act_res = int(self.browser.find_element(*HeaderPageLocators.CART_ORDER_COUNTER).text.strip())
+        with allure.step("Хедер: Проверка количества позиций в корзине"):
+            assert exp_res == act_res, f"Некорректное количество позиций в корзине! ОР: {exp_res}, ФР: {act_res}"

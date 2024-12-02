@@ -32,13 +32,10 @@ class ProductPage(HeaderPage):
     def get_title_and_price(self):
         prod_title = self.browser.find_element(*ProductPageLocators.PRODUCT_TITLE).text
         prod_price = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text
-        print()
-        print(prod_title, prod_price, sep="\n")
         return prod_title, prod_price
 
     def add_to_cart(self, title):
-        with allure.step(f"Добавить в корзину това: {title}"):
+        with allure.step(f"Добавить в корзину товар: {title}"):
             self.scroll_to_element(*ProductPageLocators.BUY_BUTTON, title)
-            sleep(1)
             self.buy_button.click()
 
