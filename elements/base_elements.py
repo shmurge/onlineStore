@@ -1,4 +1,5 @@
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains as AC
 from selenium.webdriver.common.keys import Keys
@@ -30,6 +31,13 @@ class Button:
             color = self.browser.execute_script(
                 "return window.getComputedStyle(arguments[0]).getPropertyValue('background-color');", button)
         return color
+
+    def waiting_clickable(self, timeout=5):
+        try:
+            WebDriverWait(self.browser, timeout).until(EC.element_to_be_clickable(self.locator))
+        except TimeoutException:
+            return False
+        return True
 
 
 class Input:

@@ -19,6 +19,7 @@ from time import sleep
 @pytest.mark.main_page
 class TestMainPagePositive:
     link = Url.MAIN_PAGE
+    title_ls = []
 
     @allure.severity(allure.severity_level.CRITICAL)
     @allure.suite("Авторизация")
@@ -165,6 +166,7 @@ class TestMainPagePositive:
         cat_page.select_product_in_catalogue("Смартфоны", "Смартфоны Xiaomi")
         cat_page.select_random_product_card()
         prod_title, prod_price = product_page.get_title_and_price()
+        self.title_ls.append(prod_title)
         product_page.add_to_cart(prod_title)
         product_added_modal = ProductAddedModal(browser, browser.current_url)
         product_added_modal.should_be_buy_options_modal()
@@ -174,15 +176,15 @@ class TestMainPagePositive:
         cat_page.select_product_in_catalogue("Смартфоны", "Смартфоны Xiaomi")
         cat_page.select_random_product_card()
         prod_title, prod_price = product_page.get_title_and_price()
+        self.title_ls.append(prod_title)
         product_page.add_to_cart(prod_title)
         product_added_modal = ProductAddedModal(browser, browser.current_url)
         product_added_modal.should_be_buy_options_modal()
         product_added_modal.place_an_order()
-        sleep(15)
-
+        sleep(10)
         cart_page = CartPage(browser, browser.current_url)
-        cart_page.check_product_position_in_cart()
-
+        cart_page.check_product_position_in_cart(*self.title_ls)
+        cart_page.check_quantity_and_price_positions_in_cart()
 
 
 @pytest.mark.negative
