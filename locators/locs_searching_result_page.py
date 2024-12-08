@@ -25,4 +25,3 @@ class SearchingResultPageLocators:
     @staticmethod
     def construction_current_prod_card_locator(index):
         return (By.XPATH, f'//*[@data-index={index}]')
-

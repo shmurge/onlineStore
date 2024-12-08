@@ -32,6 +32,20 @@ class Button:
                 "return window.getComputedStyle(arguments[0]).getPropertyValue('background-color');", button)
         return color
 
+    def check_button_color(self, exp_res):
+        act_res = self.get_button_color()
+        with allure.step(f"Проверка цвета в: {self.name}"):
+            assert act_res == exp_res, f"Несоответствие цвета в {self.name}! ОР: {exp_res}, ФР: {act_res}"
+
+    def get_button_text(self):
+        button_text = self.browser.find_element(*self.locator).text
+        return button_text
+
+    def check_button_text(self, exp_res):
+        with allure.step(f"Проверить текст в {self.name}"):
+            act_res = self.get_button_text()
+            assert act_res == exp_res, f"Некорректный текст в кнопке! ОР: {exp_res}, ФР: {act_res}"
+
     def waiting_clickable(self, timeout=5):
         try:
             WebDriverWait(self.browser, timeout).until(EC.element_to_be_clickable(self.locator))
@@ -106,4 +120,3 @@ class Input:
         with allure.step(f"{self.name}: проверка плэйсхолдера"):
             assert act_placeholder == exp_placeholder, \
                 f"В {self.name} некорректный плэйсхолдер! ОР: {exp_placeholder}, ФР: {act_placeholder}"
-

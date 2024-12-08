@@ -22,6 +22,9 @@ class ButtonsData:
     SIGN_IN_ORIGINAL_COLOR = "rgb(255, 255, 255)"
     SIGN_IN_HOVER_COLOR = "rgb(49, 74, 194)"
 
+    TEXT_IN_PROD_PAGE_BUY_BUTTON = "КУПИТЬ"
+    TEXT_IN_PROD_PAGE_GO_TO_CART_BUTTON = "ПЕРЕЙТИ В КОРЗИНУ"
+
 
 class Url:
     MAIN_PAGE = "https://quke.ru/"
@@ -29,14 +32,12 @@ class Url:
 
 
 class Catalogue:
-
     CATALOGUE = {
         "Смартфоны": [["Смартфоны Xiaomi", "Xiaomi"], ["Смартфоны Samsung", "Samsung"], ["Смартфоны Apple", "Apple"],
                       ["Смартфоны Realme", "Realme"], ["Смартфоны Google", "Google"], ["Смартфоны Honor", "Honor"],
-                      ["Смартфоны Infinix", "Infinix"], ["Смартфоны OnePlus", "OnePlus"], ["Смартфоны Huawei", "Huawei"],
-                      ["Смартфоны Tecno", "Tecno"], ["Смартфоны Vivo", "Vivo"], ["Смартфоны Blackview", "Blackview"],
-                      ["Смартфоны Oppo", "Oppo"], ["Смартфоны Nothing", "Nothing"]],
-        "Планшеты, ноутбуки и электронные книги": [["Планшеты", "Планшет"],["Samsung", "Планшет Samsung"],
+                      ["Смартфоны Infinix", "Infinix"], ["Смартфоны OnePlus", "OnePlus"],
+                      ["Смартфоны Huawei", "Huawei"]],
+        "Планшеты, ноутбуки и электронные книги": [["Планшеты", "Планшет"], ["Samsung", "Планшет Samsung"],
                                                    ["Huawei", "Планшет Huawei"], ["Digma", "Планшет Digma"],
                                                    ["Ноутбуки", "Ноутбук"], ["ASUS", "Asus"], ["Lenovo", "Lenovo"],
                                                    ["HP", "HP"], ["Acer", "Acer"]],
@@ -46,8 +47,8 @@ class Catalogue:
                        ["Зарядные устройства Apple", "Сетевое зарядное устройство Apple"],
                        ["Зарядные устройства Samsung", "Сетевое зарядное устройство Samsung"],
                        ["Чехлы для планшетов", "Чехол"], ["Защитные стекла для планшетов", "Защитное стекло"],
-                       ["Защитные пленки для планшетов", "Защитная пленка"]],
-        "Умные часы и браслеты": [["Xiaomi Mi Band 9", "Xiaomi Mi Smart Band 9"], ["Honor Band 9", "Honor Band 9"]]}
+                       ["Защитные пленки для планшетов", "Защитная пленка"]]}
+
 
 class ProductName:
     PRODUCT_NAMES_LIST = ["Xiaomi Redmi Note 13 Pro", "iPhone 15", "Huawei Matepad SE 11", "Ноутбук Apple",

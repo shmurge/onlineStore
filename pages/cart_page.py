@@ -58,3 +58,10 @@ class CartPage(HeaderPage):
         if total_cart_price.isdigit():
             return int(total_cart_price)
         return None
+
+    def check_total_price_in_cart_and_in_header(self):
+        with allure.step("Проверить общую стоимость корзины и стоимость в заголовке"):
+            total_cart_price = self.browser.find_element(*CartPageLocators.CART_TOTAL_PRICE).text
+            price_in_header = self.browser.find_element(*HeaderPageLocators.CART_ORDER_PRICE).text
+            assert total_cart_price == price_in_header, (f"Несоответствие стоимости в корзине и в хэдере!"
+                                                         f"В корзине: {total_cart_price}, в хэдере: {price_in_header}")

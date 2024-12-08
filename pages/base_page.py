@@ -17,7 +17,8 @@ class BasePage:
         self.url = url
         self.browser.implicitly_wait(timeout)
 
-        self.cookie_apply_button = Button(self.browser, "Кнопка: Принять куки", *BasePageLocators.COOKIE_ALERT_APPLY_BUTTON)
+        self.cookie_apply_button = Button(self.browser, "Кнопка: Принять куки",
+                                          *BasePageLocators.COOKIE_ALERT_APPLY_BUTTON)
 
     def open(self, url):
         with allure.step(f'Открыть страницу {url}'):
@@ -54,9 +55,9 @@ class BasePage:
             return False
         return True
 
-    def is_element_visible(self, how, what):
+    def is_element_visible(self, how, what, timeout=10, freq=0.5):
         try:
-            WebDriverWait(self.browser, 10, 0.5).until(EC.visibility_of_element_located((how, what)))
+            WebDriverWait(self.browser, timeout, freq).until(EC.visibility_of_element_located((how, what)))
         except TimeoutException:
             return False
         return True
@@ -134,19 +135,7 @@ class BasePage:
             assert exp_res in self.browser.current_url, (f'Текущий url: {self.browser.current_url} '
                                                          f'должен содержать подстроку: {exp_res}')
 
-    # def check_cookie_alert(self):
-    #     try:
-    #         self.is_element_visible(*BasePageLocators.COOKIE_ALERT)
-    #         with allure.step("Принять куки"):
-    #             self.cookie_apply_button.click()
-    #     except NoSuchElementException:
-    #         pass
-
-    def check_cookie_alert(self):
-        self.browser.implicitly_wait(3)
-        alert = self.browser.find_element(*BasePageLocators.COOKIE_ALERT).is_displayed()
-        if alert:
+    def accept_cookie(self):
+        if self.is_element_visible(*BasePageLocators.COOKIE_ALERT, timeout=2):
             with allure.step("Принять куки"):
                 self.cookie_apply_button.click()
-
-

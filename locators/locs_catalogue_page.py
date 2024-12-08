@@ -2,7 +2,6 @@ from selenium.webdriver.common.by import By
 
 
 class CataloguePageLocators:
-
     # Карточка товара
     PRODUCT_CARD = (By.XPATH, '//*[@class="b-card2-v2  js-product-item"]')
     PRODUCT_CARD_BUY_BUTTON = (By.XPATH, '//*[@class="b-card2-v2__buy add-to-cart"]')
@@ -17,4 +16,3 @@ class CataloguePageLocators:
     @staticmethod
     def construction_price_locator(index):
         return (By.XPATH, f'//*[@data-index={index}]/descendant::div[@class="b-card2-v2__price"]')
-

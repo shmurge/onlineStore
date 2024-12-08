@@ -27,8 +27,8 @@ class ProductAddedModal(HeaderPage):
                 'Модалка "Товар добавлен в корзину" не отображается!'
 
     def place_an_order(self):
+        sleep(0.5)
         with allure.step("Перейти в корзину для оформления заказа"):
-            self.move_to_element(*self.place_an_order_button.locator, self.place_an_order_button.name)
             self.place_an_order_button.click()
 
     def continue_shopping(self):

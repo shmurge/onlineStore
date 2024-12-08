@@ -16,18 +16,20 @@ class ProductPage(HeaderPage):
         super().__init__(browser, url, timeout)
 
         self.buy_button = Button(self.browser, "Кнопка Купить", *ProductPageLocators.BUY_BUTTON)
+        self.go_to_cart_button = Button(self.browser, "Кнопка Перейти в корзину",
+                                        *ProductPageLocators.GO_TO_CART_BUTTON)
 
     def should_be_correct_product_title_on_prod_page(self, exp_res):
         with allure.step("Сравнение наименования товара в карточке и на странице товара"):
             act_res = self.browser.find_element(*ProductPageLocators.PRODUCT_TITLE).text.strip()
             assert exp_res.lower() in act_res.lower(), (f"Некорректное наименование товара!"
-                                        f"В карточке: {exp_res}, на странице товара: {act_res}")
+                                                        f"В карточке: {exp_res}, на странице товара: {act_res}")
 
     def should_be_correct_product_price_on_prod_page(self, exp_res):
         with allure.step("Сравнение стоимости товара в карточке и на странице товара"):
             act_res = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text.strip()
             assert act_res.lower() in exp_res.lower(), (f"Некорректная стоимость товара!"
-                                        f"В карточке: {exp_res}, на странице товара: {act_res}")
+                                                        f"В карточке: {exp_res}, на странице товара: {act_res}")
 
     def get_title_and_price(self):
         prod_title = self.browser.find_element(*ProductPageLocators.PRODUCT_TITLE).text
@@ -39,3 +41,12 @@ class ProductPage(HeaderPage):
             self.scroll_to_element(*ProductPageLocators.BUY_BUTTON, title)
             self.buy_button.click()
 
+    def go_to_cart(self):
+        with allure.step("Перейти в корзину"):
+            self.go_to_cart_button.click()
+
+    def check_buy_button_text(self, exp_res):
+        self.buy_button.check_button_text(exp_res)
+
+    def check_go_to_cart_button_text(self, exp_res):
+        self.go_to_cart_button.check_button_text(exp_res)

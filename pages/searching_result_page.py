@@ -26,8 +26,7 @@ class SearchingResultPage(HeaderPage):
                                                             f"Товар: {el.text} не содержит подстроки: {exp_res}")
 
     def select_random_product_card(self):
-        with (allure.step(
-            "Выбор произвольной карточки товара со статусом 'В наличии' на странице с результатом поиска")):
+        with allure.step("Выбор произвольной карточки товара со статусом 'В наличии' на странице с результатом поиска"):
             self.is_element_visible(*SearchingResultPageLocators.PRODUCT_CARD)
             prod_card, index = self.get_random_product_card_with_in_stock_status()
             prod_title = self.browser.find_element(*SearchingResultPageLocators.construction_title_locator(index))
@@ -45,7 +44,7 @@ class SearchingResultPage(HeaderPage):
             "На странице с результатом поиска нет ни одного товара со статусом 'В наличии'"
         index = randrange(0, len(prod_cards_list))
         prod_card = prod_cards_list[index]
-        return prod_card, index+1
+        return prod_card, index + 1
 
     def scroll_to_card(self, card, name):
         with allure.step(f"Проскроллить до товара: {name}"):

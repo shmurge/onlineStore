@@ -16,20 +16,16 @@ class LoginPage(HeaderPage):
         self.password_input.click()
         self.sign_in_button.click()
 
-    def sign_in_button_check_original_color(self):
-        exp_result = ButtonsData.SIGN_IN_ORIGINAL_COLOR
-        act_result = self.sign_in_button.get_button_color()
+    def sign_in_button_check_original_color(self, exp_res):
         with allure.step(f"Проверка исходного цвета: {self.sign_in_button.name}"):
-            assert exp_result == act_result, f"Несоответствие исходного цвета! ОР: {exp_result}, ФР: {act_result}"
+            self.sign_in_button.check_button_color(exp_res)
 
     def move_to_sign_in_button(self):
         self.move_to_element(*self.sign_in_button.locator, self.sign_in_button.name)
 
-    def sign_in_button_check_hover_color(self):
-        exp_result = ButtonsData.SIGN_IN_HOVER_COLOR
-        act_result = self.sign_in_button.get_button_color()
+    def sign_in_button_check_hover_color(self, exp_res):
         with allure.step(f"Проверка цвета ховера: {self.sign_in_button.name}"):
-            assert exp_result == act_result, f"Несоответствие цвета ховера! ОР: {exp_result}, ФР: {act_result}"
+            self.sign_in_button.check_button_color(exp_res)
 
     def should_be_required_field_under_login_input(self):
         exp_message = InputErrors.LOGIN_REQUIRED

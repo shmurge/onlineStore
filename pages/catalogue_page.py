@@ -28,8 +28,9 @@ class CataloguePage(HeaderPage):
         with allure.step("Выбор произвольной карточки товара со статусом 'В наличии'"):
             prod_card, index = self.get_random_product_card_with_in_stock_status()
             prod_title = self.browser.find_element(*CataloguePageLocators.construction_title_locator(index))
-            prod_price = (# парсим цену без точки в конце
-                self.browser.find_element(*CataloguePageLocators.construction_price_locator(index)).text.strip())[:-1]
+            # парсим цену без точки в конце
+            prod_price = (self.browser.find_element(
+                *CataloguePageLocators.construction_price_locator(index)).text.strip())[:-1]
             self.scroll_to_card(prod_title, prod_title.text.strip())
             with allure.step(f"Клик по карточке товара: {prod_title.text.strip()}"):
                 if prod_title.is_displayed():
@@ -42,7 +43,7 @@ class CataloguePage(HeaderPage):
         assert len(prod_cards_list) != 0, "На странице каталога нет ни одного товара со статусом 'В наличии'"
         index = randrange(0, len(prod_cards_list))
         prod_card = prod_cards_list[index]
-        return prod_card, index+1
+        return prod_card, index + 1
 
     def scroll_to_card(self, card, name):
         self.is_element_visible(*CataloguePageLocators.PRODUCT_CARD)
@@ -50,4 +51,3 @@ class CataloguePage(HeaderPage):
             action = AC(self.browser)
             action.scroll_to_element(card)
             action.perform()
-
