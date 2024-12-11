@@ -43,6 +43,7 @@ class ProductPage(HeaderPage):
 
     def go_to_cart(self):
         with allure.step("Перейти в корзину"):
+            self.scroll_to_element(*self.go_to_cart_button.locator, self.go_to_cart_button.name)
             self.go_to_cart_button.click()
 
     def check_buy_button_text(self, exp_res):

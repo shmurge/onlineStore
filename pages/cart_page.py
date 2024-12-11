@@ -16,6 +16,9 @@ from utils.data import *
 
 class CartPage(HeaderPage):
 
+    def __init__(self, browser, url, timeout=10):
+        super().__init__(browser, url, timeout)
+
     def should_be_cart_page(self):
         with allure.step("Проверить отображение страницы корзины"):
             self.should_be_correct_url(CartPageLocators.CART_PATH_PARAM)
@@ -27,10 +30,15 @@ class CartPage(HeaderPage):
             assert message, "Не отображается сообщение 'Корзина пуста'!"
 
     def check_product_position_in_cart(self, *args):
-        title_list = [elem.text for elem in self.browser.find_elements(*CartPageLocators.PROD_TITLE)]
+        title_list = [elem.text.strip() for elem in self.browser.find_elements(*CartPageLocators.PROD_TITLE)]
         for arg in args:
             assert arg in title_list, (f"Добавленный товар: {arg} не отображается в корзине! "
                                        f"Список товаров в корзине: {title_list}")
+
+    def should_not_be_position_in_cart(self, title):
+        title_list = [elem.text.strip() for elem in self.browser.find_elements(*CartPageLocators.PROD_TITLE)]
+        assert title not in title_list, (f"Позиция: {title} отображается в корзине, но должна быть удалена!"
+                                         f"Содержимое корзины: {title_list}")
 
     # Подсчет стоимости каждой позиции в корзине и сравнение с итоговой стоимостью корзины
     def check_quantity_and_price_positions_in_cart(self):
@@ -65,3 +73,19 @@ class CartPage(HeaderPage):
             price_in_header = self.browser.find_element(*HeaderPageLocators.CART_ORDER_PRICE).text
             assert total_cart_price == price_in_header, (f"Несоответствие стоимости в корзине и в хэдере!"
                                                          f"В корзине: {total_cart_price}, в хэдере: {price_in_header}")
+
+    def get_position_id_and_title(self):
+        id_list = [elem.get_attribute('data-id') for elem in self.browser.find_elements(*CartPageLocators.PROD_QUANTITY)]
+        title_list = [elem.text.strip() for elem in self.browser.find_elements(*CartPageLocators.PROD_TITLE)]
+        prod_dict = {id_list[i]:title_list[i] for i in range(len(id_list))}
+        return prod_dict
+
+    def remove_random_position_from_cart(self):
+        id_and_title = self.get_position_id_and_title()
+        rand_id = choice(list(id_and_title.keys()))
+        with allure.step(f"Удалить из корзины позицию {id_and_title[rand_id]}"):
+            rm_button = self.browser.find_element(*CartPageLocators.construction_delete_position_button(rand_id))
+            #rm_button.click()
+            return id_and_title[rand_id]
+
+

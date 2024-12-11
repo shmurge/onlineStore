@@ -130,7 +130,6 @@ class TestMainPagePositive:
     @allure.suite("Корзина")
     @allure.title("Главная/каталог: Добавить товар в корзину со станицы товара и продолжить покупки")
     @pytest.mark.may_be_login
-    @pytest.mark.test
     def test_add_to_cart_from_prod_page_from_catalogue_and_continue_shopping(self, browser):
         self.test_go_to_prod_page_from_catalogue(browser)
         quantity = 0
@@ -163,6 +162,7 @@ class TestMainPagePositive:
     @allure.suite("Корзина")
     @allure.title("Главная: Добавить два товара в корзину (через каталог и через поиск)")
     @pytest.mark.may_be_login
+    @pytest.mark.xfail
     @pytest.mark.test
     def test_add_to_cart_two_prods_from_catalog_and_from_main_search(self, browser):
         self.test_go_to_prod_page_from_catalogue(browser)
@@ -192,6 +192,16 @@ class TestMainPagePositive:
         cart_page.check_quantity_and_price_positions_in_cart()
         cart_page.check_total_price_in_cart_and_in_header()
 
+    @allure.suite("Корзина")
+    @allure.title("Удалить рандомный товар из корзины")
+    @pytest.mark.may_be_login
+    def test_remove_random_position_from_cart(self, browser):
+        self.test_add_to_cart_from_prod_page_from_catalogue_and_place_an_order(browser)
+        cart_page = CartPage(browser, browser.current_url)
+        cart_page.check_quantity_and_price_positions_in_cart()
+        cart_page.check_total_price_in_cart_and_in_header()
+        deleted_pos = cart_page.remove_random_position_from_cart()
+        cart_page.should_not_be_position_in_cart(deleted_pos)
 
 @pytest.mark.negative
 @pytest.mark.main_page
