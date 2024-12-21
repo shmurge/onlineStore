@@ -11,7 +11,7 @@ class TestLoginPagePositive:
 
     @allure.suite("Авторизация")
     @allure.title("Проверка цвета кнопки Войти")
-    def test_check_sign_in_button_color(self, browser):
+    def test_check_sign_in_button_color(self, browser, clear_cookies_after_test):
         page = LoginPage(browser, self.link)
         page.open(self.link)
         page.accept_cookie()
@@ -22,7 +22,7 @@ class TestLoginPagePositive:
 
     @allure.suite("Авторизация")
     @allure.title("Проверка плэйсхолдеров в инпутах формы авторизации")
-    def test_check_placeholders_in_inputs_on_login_form(self, browser):
+    def test_check_placeholders_in_inputs_on_login_form(self, browser, clear_cookies_after_test):
         page = LoginPage(browser, self.link)
         page.open(self.link)
         page.accept_cookie()
@@ -37,7 +37,7 @@ class TestLoginPageNegative:
 
     @allure.suite("Авторизация")
     @allure.title("Проверка валидации инпутов без ввода данных")
-    def test_login_page_required_field_message_in_inputs(self, browser):
+    def test_login_page_required_field_message_in_inputs(self, browser, clear_cookies_after_test):
         page = LoginPage(browser, self.link)
         page.open(self.link)
         page.accept_cookie()
@@ -49,7 +49,7 @@ class TestLoginPageNegative:
     @allure.suite("Авторизация")
     @allure.title("Проверка валидации инпута Логин при вводе невалидного email")
     @pytest.mark.parametrize('email', InputData.INVALID_EMAILS)
-    def test_login_page_invalid_email(self, browser, email):
+    def test_login_page_invalid_email(self, browser, email, clear_cookies_after_test):
         page = LoginPage(browser, self.link)
         page.open(self.link)
         page.accept_cookie()
@@ -61,7 +61,7 @@ class TestLoginPageNegative:
 
     @allure.suite("Авторизация")
     @allure.title("Проверка отсутствия сообщений об ошибках в инпутах при вводе валидных данных")
-    def test_missing_input_errors(self, browser):
+    def test_missing_input_errors(self, browser, clear_cookies_after_test):
         page = LoginPage(browser, self.link)
         page.open(self.link)
         page.accept_cookie()

@@ -75,9 +75,10 @@ class CartPage(HeaderPage):
                                                          f"В корзине: {total_cart_price}, в хэдере: {price_in_header}")
 
     def get_position_id_and_title(self):
-        id_list = [elem.get_attribute('data-id') for elem in self.browser.find_elements(*CartPageLocators.PROD_QUANTITY)]
+        id_list = [elem.get_attribute('data-id') for elem in
+                   self.browser.find_elements(*CartPageLocators.PROD_QUANTITY)]
         title_list = [elem.text.strip() for elem in self.browser.find_elements(*CartPageLocators.PROD_TITLE)]
-        prod_dict = {id_list[i]:title_list[i] for i in range(len(id_list))}
+        prod_dict = {id_list[i]: title_list[i] for i in range(len(id_list))}
         return prod_dict
 
     def remove_random_position_from_cart(self):
@@ -85,7 +86,5 @@ class CartPage(HeaderPage):
         rand_id = choice(list(id_and_title.keys()))
         with allure.step(f"Удалить из корзины позицию {id_and_title[rand_id]}"):
             rm_button = self.browser.find_element(*CartPageLocators.construction_delete_position_button(rand_id))
-            #rm_button.click()
+            rm_button.click()
             return id_and_title[rand_id]
-
-

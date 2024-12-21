@@ -25,7 +25,7 @@ class TestMainPagePositive:
     @allure.severity(allure.severity_level.CRITICAL)
     @allure.suite("Авторизация")
     @allure.title("Главная: Авторизация")
-    def test_authorize(self, browser):
+    def test_authorize(self, browser, clear_cookies_after_test):
         page = LoginPage(browser, self.link)
         page.open(self.link)
         page.accept_cookie()
@@ -37,7 +37,7 @@ class TestMainPagePositive:
     @allure.title("Главная: Выбор региона")
     @pytest.mark.parametrize('region', ["Москва и МО", "Санкт-Петербург"])
     @pytest.mark.may_be_login
-    def test_choose_region(self, browser, region):
+    def test_choose_region(self, browser, region, clear_cookies_after_test):
         page = RegionPage(browser, self.link)
         page.open(self.link)
         page.accept_cookie()
@@ -47,7 +47,7 @@ class TestMainPagePositive:
 
     @allure.suite("Профиль пользователя")
     @allure.title("Главная: Перход в профиль")
-    def test_go_to_profile_page(self, browser, preconditions_login):
+    def test_go_to_profile_page(self, browser, preconditions_login, clear_cookies_after_test):
         page = ProfilePage(browser, self.link)
         page.accept_cookie()
         page.go_to_profile_page()
@@ -56,25 +56,22 @@ class TestMainPagePositive:
     @allure.suite("Поиск товара")
     @allure.title("Главная: Поиск товара через каталог")
     @pytest.mark.may_be_login
-    def test_search_by_catalogue(self, browser):
-        item_type = choice(list(Catalogue.CATALOGUE))
-        item = choice(Catalogue.CATALOGUE[item_type])
-        item_link = item[0]
-        item_name = item[1]
-        page = HeaderPage(browser, self.link)
-        page.open(self.link)
-        page.accept_cookie()
-        page.open_catalogue()
-        page.select_product_in_catalogue(item_type, item_link)
-        page = CataloguePage(browser, browser.current_url)
-        page.check_searching_result(item_name)
+    def test_search_by_catalogue(self, browser, clear_cookies_after_test):
+        header_page = HeaderPage(browser, self.link)
+        catalogue_page = CataloguePage(browser, self.link)
+        item_type, item_link, item_title = catalogue_page.get_type_link_and_title_from_prod_catalogue()
+        header_page.open(self.link)
+        header_page.accept_cookie()
+        header_page.open_catalogue()
+        header_page.select_product_in_catalogue(item_type, item_link)
+        catalogue_page.check_searching_result(item_title)
 
     @allure.suite("Поиск товара")
     @allure.title("Главная: Переход на страницу товара из каталога")
     @pytest.mark.may_be_login
     @pytest.mark.xfail
-    def test_go_to_prod_page_from_catalogue(self, browser):
-        self.test_search_by_catalogue(browser)
+    def test_go_to_prod_page_from_catalogue(self, browser, clear_cookies_after_test):
+        self.test_search_by_catalogue(browser, False)
         page = CataloguePage(browser, browser.current_url)
         title, price = page.select_random_product_card()
         page = ProductPage(browser, browser.current_url)
@@ -86,7 +83,7 @@ class TestMainPagePositive:
     @pytest.mark.parametrize("product_name", ProductName.PRODUCT_NAMES_LIST)
     @pytest.mark.may_be_login
     @pytest.mark.xfail
-    def test_search_by_main_search_input(self, browser, product_name):
+    def test_search_by_main_search_input(self, browser, product_name, clear_cookies_after_test):
         page = HeaderPage(browser, self.link)
         page.open(self.link)
         page.accept_cookie()
@@ -99,8 +96,8 @@ class TestMainPagePositive:
     @pytest.mark.parametrize("product_name", [*ProductName.PRODUCT_NAMES_LIST])
     @pytest.mark.may_be_login
     @pytest.mark.xfail
-    def test_go_to_prod_page_from_searching_result_page(self, browser, product_name):
-        self.test_search_by_main_search_input(browser, product_name)
+    def test_go_to_prod_page_from_searching_result_page(self, browser, product_name, clear_cookies_after_test):
+        self.test_search_by_main_search_input(browser, product_name, False)
         page = SearchingResultPage(browser, browser.current_url)
         title, price = page.select_random_product_card()
         page = ProductPage(browser, browser.current_url)
@@ -110,7 +107,7 @@ class TestMainPagePositive:
     @allure.suite("Корзина")
     @allure.title("Главная: Переход в корзину")
     @pytest.mark.may_be_login
-    def test_go_to_cart_page(self, browser):
+    def test_go_to_cart_page(self, browser, clear_cookies_after_test):
         page = CartPage(browser, self.link)
         page.open(self.link)
         page.accept_cookie()
@@ -120,7 +117,7 @@ class TestMainPagePositive:
     @allure.suite("Корзина")
     @allure.title("Главная: Проверка наличия сообщения о пустой корзине")
     @pytest.mark.may_be_login
-    def test_check_empty_cart_message(self, browser):
+    def test_check_empty_cart_message(self, browser, clear_cookies_after_test):
         page = CartPage(browser, self.link)
         page.open(self.link)
         page.accept_cookie()
@@ -130,8 +127,8 @@ class TestMainPagePositive:
     @allure.suite("Корзина")
     @allure.title("Главная/каталог: Добавить товар в корзину со станицы товара и продолжить покупки")
     @pytest.mark.may_be_login
-    def test_add_to_cart_from_prod_page_from_catalogue_and_continue_shopping(self, browser):
-        self.test_go_to_prod_page_from_catalogue(browser)
+    def test_add_to_cart_from_prod_page_from_catalogue_and_continue_shopping(self, browser, clear_cookies_after_test):
+        self.test_go_to_prod_page_from_catalogue(browser, False)
         quantity = 0
         product_page = ProductPage(browser, browser.current_url)
         prod_title, prod_price = product_page.get_title_and_price()
@@ -147,8 +144,8 @@ class TestMainPagePositive:
     @allure.suite("Корзина")
     @allure.title("Главная/каталог: Добавить товар в корзину со станицы товара и перейти к оформлению")
     @pytest.mark.may_be_login
-    def test_add_to_cart_from_prod_page_from_catalogue_and_place_an_order(self, browser):
-        self.test_go_to_prod_page_from_catalogue(browser)
+    def test_add_to_cart_from_prod_page_from_catalogue_and_place_an_order(self, browser, clear_cookies_after_test):
+        self.test_go_to_prod_page_from_catalogue(browser, False)
         product_page = ProductPage(browser, browser.current_url)
         cart_page = CartPage(browser, browser.current_url)
         prod_title, prod_price = product_page.get_title_and_price()
@@ -164,8 +161,8 @@ class TestMainPagePositive:
     @pytest.mark.may_be_login
     @pytest.mark.xfail
     @pytest.mark.test
-    def test_add_to_cart_two_prods_from_catalog_and_from_main_search(self, browser):
-        self.test_go_to_prod_page_from_catalogue(browser)
+    def test_add_to_cart_two_prods_from_catalog_and_from_main_search(self, browser, clear_cookies_after_test):
+        self.test_go_to_prod_page_from_catalogue(browser, False)
         product_page = ProductPage(browser, browser.current_url)
         header_page = HeaderPage(browser, browser.current_url)
         search_res_page = SearchingResultPage(browser, browser.current_url)
@@ -193,15 +190,25 @@ class TestMainPagePositive:
         cart_page.check_total_price_in_cart_and_in_header()
 
     @allure.suite("Корзина")
-    @allure.title("Удалить рандомный товар из корзины")
+    @allure.title("Удалить товар из корзины")
     @pytest.mark.may_be_login
-    def test_remove_random_position_from_cart(self, browser):
-        self.test_add_to_cart_from_prod_page_from_catalogue_and_place_an_order(browser)
+    def test_remove_position_from_cart(self, browser, clear_cookies_after_test):
+        self.test_add_to_cart_from_prod_page_from_catalogue_and_place_an_order(browser, False)
         cart_page = CartPage(browser, browser.current_url)
         cart_page.check_quantity_and_price_positions_in_cart()
         cart_page.check_total_price_in_cart_and_in_header()
+        cart_page.remove_random_position_from_cart()
+        cart_page.should_be_message_empty_cart()
+
+    @allure.suite("Корзина")
+    @allure.title("Добавить два товара в корзину и удалить 1 рандомный товар")
+    @pytest.mark.may_be_login
+    def test_remove_random_position_from_cart(self, browser, clear_cookies_after_test):
+        self.test_add_to_cart_two_prods_from_catalog_and_from_main_search(browser, False)
+        cart_page = CartPage(browser, browser.current_url)
         deleted_pos = cart_page.remove_random_position_from_cart()
         cart_page.should_not_be_position_in_cart(deleted_pos)
+
 
 @pytest.mark.negative
 @pytest.mark.main_page
@@ -213,7 +220,8 @@ class TestMainPageNegative:
     @pytest.mark.parametrize("item_type, item_link, item_name",
                              [(key, *item) for key, items in Catalogue.CATALOGUE.items() for item in items])
     @pytest.mark.may_be_login
-    def test_check_all_positions_in_catalogue_from_main_page(self, browser, item_type, item_link, item_name):
+    def test_check_all_positions_in_catalogue_from_main_page(self, browser, item_type, item_link,
+                                                             item_name, clear_cookies_after_test):
         page = HeaderPage(browser, self.link)
         page.open(self.link)
         page.accept_cookie()

@@ -12,7 +12,8 @@ class TestProfilePagePositive:
 
     @allure.suite("Профиль пользователя")
     @allure.title("Проверка корректности email и имени пользователя в карточке профиля")
-    def test_should_be_correct_email_and_username_in_profile_card(self, browser, preconditions_login):
+    def test_should_be_correct_email_and_username_in_profile_card(self, browser, preconditions_login,
+                                                                  clear_cookies_after_test):
         page = ProfilePage(browser, self.link)
         page.open(self.link)
         page.accept_cookie()
@@ -21,7 +22,7 @@ class TestProfilePagePositive:
 
     @allure.suite("Профиль пользователя")
     @allure.title("Выход из аккаунта")
-    def test_user_can_logout_of_the_account(self, browser, preconditions_login):
+    def test_user_can_logout_of_the_account(self, browser, preconditions_login, clear_cookies_after_test):
         page = ProfilePage(browser, self.link)
         page.accept_cookie()
         page.open(self.link)
@@ -31,7 +32,7 @@ class TestProfilePagePositive:
     @allure.suite("Локализация")
     @allure.title("Профиль: Выбор региона")
     @pytest.mark.parametrize('region', ["Москва и МО", "Санкт-Петербург"])
-    def test_choose_region_from_profile_page(self, browser, region, preconditions_login):
+    def test_choose_region_from_profile_page(self, browser, region, preconditions_login, clear_cookies_after_test):
         page = RegionPage(browser, self.link)
         page.accept_cookie()
         page.open(self.link)

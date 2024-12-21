@@ -139,3 +139,7 @@ class BasePage:
         if self.is_element_visible(*BasePageLocators.COOKIE_ALERT, timeout=2):
             with allure.step("Принять куки"):
                 self.cookie_apply_button.click()
+
+    def clear_all_cookies(self):
+        with allure.step("Очистить все куки"):
+            self.browser.delete_all_cookies()

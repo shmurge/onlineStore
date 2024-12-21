@@ -51,3 +51,11 @@ class CataloguePage(HeaderPage):
             action = AC(self.browser)
             action.scroll_to_element(card)
             action.perform()
+
+    @staticmethod
+    def get_type_link_and_title_from_prod_catalogue():
+        item_type = choice(list(Catalogue.CATALOGUE))
+        item = choice(Catalogue.CATALOGUE[item_type])
+        item_link = item[0]
+        item_title = item[1]
+        return item_type, item_link, item_title

@@ -13,7 +13,8 @@ def pytest_addoption(parser):
     parser.addoption('--headless', action='store_true', help='Launching the browser in headless mode')
     parser.addoption('--login', action='store_true', help='Launching the browser with pre conditions: login')
 
-@pytest.fixture(scope="function")
+
+@pytest.fixture(scope="session")
 def browser(request):
     browser_name = request.config.getoption("browser")
     user_language = request.config.getoption("language")
@@ -51,6 +52,7 @@ def browser(request):
     yield browser
     browser.quit()
 
+
 def login_in_app(browser, link=Url.MAIN_PAGE):
     with allure.step("Предусловия: авторизация"):
         page = LoginPage(browser, link)
@@ -59,12 +61,21 @@ def login_in_app(browser, link=Url.MAIN_PAGE):
         page.user_login(*UsersData.USER_1)
         page.should_be_user_link()
 
+
 @pytest.fixture(scope="function")
 def preconditions_login(browser, link=Url.MAIN_PAGE):
     login_in_app(browser, link)
+
+
+@pytest.fixture(scope="function")
+def clear_cookies_after_test(browser, flag=True):
+    if flag:
+        yield
+        with allure.step("Очистить все куки"):
+            browser.delete_all_cookies()
+
 
 @pytest.fixture(scope="function")
 def get_browser_language(browser):
     browser_language = browser.execute_script("return navigator.language").upper()
     return browser_language
-
