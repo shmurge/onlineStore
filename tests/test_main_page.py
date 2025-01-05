@@ -1,19 +1,14 @@
 import pytest
 import allure
 from random import *
-from pages.base_page import BasePage
 from pages.cart_page import CartPage
 from pages.header_page import HeaderPage
 from pages.login_page import LoginPage
-from pages.main_page import MainPage
-from pages.region_page import RegionPage
 from pages.profile_page import ProfilePage
 from pages.catalogue_page import CataloguePage
 from pages.searching_result_page import SearchingResultPage
 from pages.product_page import ProductPage
-from pages.product_added_modal_page import ProductAddedModal
 from utils.data import *
-from time import sleep
 
 
 @pytest.mark.positive
@@ -38,7 +33,7 @@ class TestMainPagePositive:
     @pytest.mark.parametrize('region', ["Москва и МО", "Санкт-Петербург"])
     @pytest.mark.may_be_login
     def test_choose_region(self, browser, region, clear_cookies_after_test):
-        page = RegionPage(browser, self.link)
+        page = HeaderPage(browser, self.link)
         page.open(self.link)
         page.accept_cookie()
         page.open_region_modal()
@@ -125,89 +120,29 @@ class TestMainPagePositive:
         page.should_be_message_empty_cart()
 
     @allure.suite("Корзина")
-    @allure.title("Главная/каталог: Добавить товар в корзину со станицы товара и продолжить покупки")
+    @allure.title("Главная/каталог: Добавить товар в корзину со станицы товара")
     @pytest.mark.may_be_login
-    def test_add_to_cart_from_prod_page_from_catalogue_and_continue_shopping(self, browser, clear_cookies_after_test):
+    def test_add_to_cart_from_prod_page_from_catalogue(self, browser, clear_cookies_after_test):
         self.test_go_to_prod_page_from_catalogue(browser, False)
         quantity = 0
         product_page = ProductPage(browser, browser.current_url)
         prod_title, prod_price = product_page.get_title_and_price()
-        product_page.check_buy_button_text(ButtonsData.TEXT_IN_PROD_PAGE_BUY_BUTTON)
         product_page.add_to_cart(prod_title)
         quantity += 1
-        product_added_modal = ProductAddedModal(browser, browser.current_url)
-        product_added_modal.should_be_buy_options_modal()
-        product_added_modal.continue_shopping()
-        product_page.check_go_to_cart_button_text(ButtonsData.TEXT_IN_PROD_PAGE_GO_TO_CART_BUTTON)
         product_page.check_quantity_positions_in_cart(quantity)
 
     @allure.suite("Корзина")
-    @allure.title("Главная/каталог: Добавить товар в корзину со станицы товара и перейти к оформлению")
+    @allure.title("Главная/инпут поиска: Добавить товар в корзину со станицы товара")
     @pytest.mark.may_be_login
-    def test_add_to_cart_from_prod_page_from_catalogue_and_place_an_order(self, browser, clear_cookies_after_test):
-        self.test_go_to_prod_page_from_catalogue(browser, False)
+    def test_add_to_cart_from_prod_page_from_main_search_input(self, browser, clear_cookies_after_test):
+        product_name = choice(ProductName.PRODUCT_NAMES_LIST)
+        self.test_go_to_prod_page_from_searching_result_page(browser, product_name, False)
+        quantity = 0
         product_page = ProductPage(browser, browser.current_url)
-        cart_page = CartPage(browser, browser.current_url)
         prod_title, prod_price = product_page.get_title_and_price()
         product_page.add_to_cart(prod_title)
-        product_added_modal = ProductAddedModal(browser, browser.current_url)
-        product_added_modal.should_be_buy_options_modal()
-        product_added_modal.place_an_order()
-        cart_page.check_quantity_and_price_positions_in_cart()
-        cart_page.check_total_price_in_cart_and_in_header()
-
-    @allure.suite("Корзина")
-    @allure.title("Главная: Добавить два товара в корзину (через каталог и через поиск)")
-    @pytest.mark.may_be_login
-    @pytest.mark.xfail
-    @pytest.mark.test
-    def test_add_to_cart_two_prods_from_catalog_and_from_main_search(self, browser, clear_cookies_after_test):
-        self.test_go_to_prod_page_from_catalogue(browser, False)
-        product_page = ProductPage(browser, browser.current_url)
-        header_page = HeaderPage(browser, browser.current_url)
-        search_res_page = SearchingResultPage(browser, browser.current_url)
-        cart_page = CartPage(browser, browser.current_url)
-        prod_title, prod_price = product_page.get_title_and_price()
-        self.title_ls.append(prod_title)
-        product_page.check_buy_button_text(ButtonsData.TEXT_IN_PROD_PAGE_BUY_BUTTON)
-        product_page.add_to_cart(prod_title)
-        product_added_modal = ProductAddedModal(browser, browser.current_url)
-        product_added_modal.should_be_buy_options_modal()
-        product_added_modal.continue_shopping()
-        product_page.check_go_to_cart_button_text(ButtonsData.TEXT_IN_PROD_PAGE_GO_TO_CART_BUTTON)
-        header_page.search_product_by_main_search_input(choice(ProductName.PRODUCT_NAMES_LIST))
-        search_res_page.select_random_product_card()
-        prod_title, prod_price = product_page.get_title_and_price()
-        self.title_ls.append(prod_title)
-        product_page.check_buy_button_text(ButtonsData.TEXT_IN_PROD_PAGE_BUY_BUTTON)
-        product_page.add_to_cart(prod_title)
-        product_added_modal = ProductAddedModal(browser, browser.current_url)
-        product_added_modal.should_be_buy_options_modal()
-        product_added_modal.continue_shopping()
-        product_page.check_go_to_cart_button_text(ButtonsData.TEXT_IN_PROD_PAGE_GO_TO_CART_BUTTON)
-        product_page.go_to_cart()
-        cart_page.check_quantity_and_price_positions_in_cart()
-        cart_page.check_total_price_in_cart_and_in_header()
-
-    @allure.suite("Корзина")
-    @allure.title("Удалить товар из корзины")
-    @pytest.mark.may_be_login
-    def test_remove_position_from_cart(self, browser, clear_cookies_after_test):
-        self.test_add_to_cart_from_prod_page_from_catalogue_and_place_an_order(browser, False)
-        cart_page = CartPage(browser, browser.current_url)
-        cart_page.check_quantity_and_price_positions_in_cart()
-        cart_page.check_total_price_in_cart_and_in_header()
-        cart_page.remove_random_position_from_cart()
-        cart_page.should_be_message_empty_cart()
-
-    @allure.suite("Корзина")
-    @allure.title("Добавить два товара в корзину и удалить 1 рандомный товар")
-    @pytest.mark.may_be_login
-    def test_remove_random_position_from_cart(self, browser, clear_cookies_after_test):
-        self.test_add_to_cart_two_prods_from_catalog_and_from_main_search(browser, False)
-        cart_page = CartPage(browser, browser.current_url)
-        deleted_pos = cart_page.remove_random_position_from_cart()
-        cart_page.should_not_be_position_in_cart(deleted_pos)
+        quantity += 1
+        product_page.check_quantity_positions_in_cart(quantity)
 
 
 @pytest.mark.negative

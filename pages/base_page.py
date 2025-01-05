@@ -25,12 +25,12 @@ class BasePage:
             return self.browser.get(self.url)
 
     def refresh(self):
-        with allure.step('Page refreshing'):
+        with allure.step('Обновить страницу'):
             return self.browser.refresh()
 
     def go_back(self):
         """Возврат на предыдущую страницу, через кнопку в браузере!"""
-        with allure.step('Click go back button in browser'):
+        with allure.step('Вернуться на предыдущую страницу'):
             self.browser.back()
 
     def is_element_present(self, how, what):
@@ -90,15 +90,6 @@ class BasePage:
             return False
         return True
 
-    def send_keys_in_input(self, how, what, data):
-        actions = AC(self.browser)
-        input_1 = self.browser.find_element(how, what)
-        actions.double_click(input_1)
-        actions.send_keys_to_element(input_1, data).perform()
-        input_1_value = input_1.get_attribute("value")
-        assert input_1_value == data, \
-            f'Incorrect data in input! Expect: "{data}", but actual: "{input_1_value}"'
-
     def search_element_by_text(self, text):
         with allure.step(f'Поиск элемента: {text}'):
             element = self.browser.find_element(By.XPATH, f"//*[text()='{text}']")
@@ -107,14 +98,8 @@ class BasePage:
     def search_element_by_attribute_and_value(self, attribute, value):
         with allure.step(f'Поиск элемента по атрибуту: {attribute} и значению: {value}'):
             element = self.browser.find_element(By.XPATH, f"//*[normalize-space(@{attribute})='{value}']")
+        self.is_element_visible(By.XPATH, f"//*[normalize-space(@{attribute})='{value}']")
         return element
-
-    def click_action(self, x, y):  # Необходимо передать функции координаты точки, куда нужно кликнуть
-        with allure.step(f"Клик по координатам: {x}, {y}"):
-            action = AC(self.browser)
-            action.move_by_offset(x, y)
-            action.click()
-            action.perform()
 
     def move_to_element(self, how, what, name):
         with allure.step(f"Навести курсор на элемент: {name}"):
@@ -123,12 +108,17 @@ class BasePage:
             action.move_to_element(element)
             action.perform()
 
-    def scroll_to_element(self, how, what, name):
+    def scroll_to_element(self, element, name):
         with allure.step(f"Проскроллить страницу до элемента {name}"):
-            element = self.browser.find_element(how, what)
-            action = AC(self.browser)
-            action.scroll_to_element(element)
-            action.perform()
+            #element = self.browser.find_element(how, what)
+            browser_name = self.get_browser_name(self.browser)
+            if browser_name == "firefox":
+                self.browser.execute_script("document.documentElement.style.scrollBehavior = 'smooth';")
+                self.browser.execute_script("arguments[0].scrollIntoView();", element)
+                sleep(0.5)
+            elif browser_name == "chrome":
+                action = AC(self.browser)
+                action.scroll_to_element(element).perform()
 
     def should_be_correct_url(self, exp_res):
         with allure.step("Проверка корректности url"):
@@ -140,6 +130,23 @@ class BasePage:
             with allure.step("Принять куки"):
                 self.cookie_apply_button.click()
 
-    def clear_all_cookies(self):
-        with allure.step("Очистить все куки"):
-            self.browser.delete_all_cookies()
+    def set_cookie(self, *args):
+        for arg in args:
+            name, value = arg.split("=")
+            self.browser.add_cookie({'name': name, 'value': value})
+
+        self.browser.refresh()
+
+    def get_all_cookies(self):
+        return self.browser.get_cookies()
+
+    def get_php_sessid(self): # получает куку браузера PHPSESSID
+        php_sessid = self.browser.get_cookie('PHPSESSID')
+        return f"{php_sessid['name']}={php_sessid['value']}"
+
+    def get_cookie_jsp(self):
+        jsp = self.browser.get_cookie('__js_p_')
+        return f"{jsp['name']}={jsp['value']}"
+
+    def get_browser_name(self, browser):
+        return browser.name

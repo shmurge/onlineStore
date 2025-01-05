@@ -3,13 +3,7 @@ from random import *
 from selenium.webdriver.common.action_chains import ActionChains as AC
 from elements.base_elements import *
 from pages.header_page import HeaderPage
-from locators.locs_region_page import RegionPageLocators
-from locators.locs_header_page import HeaderPageLocators
-from locators.locs_login_page import LoginPageLocators
-from locators.locs_profile_page import ProfilePageLocators
-from locators.locs_product_page import ProductPageLocators
 from locators.locs_searching_result_page import SearchingResultPageLocators
-from locators.locs_catalogue_page import CataloguePageLocators
 from utils.data import *
 
 
@@ -29,25 +23,21 @@ class SearchingResultPage(HeaderPage):
         with allure.step("Выбор произвольной карточки товара со статусом 'В наличии' на странице с результатом поиска"):
             self.is_element_visible(*SearchingResultPageLocators.PRODUCT_CARD)
             prod_card, index = self.get_random_product_card_with_in_stock_status()
-            prod_title = self.browser.find_element(*SearchingResultPageLocators.construction_title_locator(index))
+            elem_title = self.browser.find_element(*SearchingResultPageLocators.construction_title_locator(index))
+            text_title = elem_title.text.strip()
             prod_price = (
                 self.browser.find_element(*SearchingResultPageLocators.construction_price_locator(index)).text.strip())
-            self.scroll_to_card(prod_title, prod_title.text.strip())
-            with allure.step(f"Клик по карточке товара: {prod_title.text.strip()}"):
-                if prod_title.is_displayed():
-                    prod_title.click()
-            return prod_title.text.strip(), f"{SearchingResultPageLocators.PRICE_PREFIX} {prod_price}"
+            prod_price = f"{SearchingResultPageLocators.PRICE_PREFIX} {prod_price}"
+            self.scroll_to_element(elem_title, text_title)
+            with allure.step(f"Клик по карточке товара: {text_title}"):
+                if elem_title.is_displayed():
+                    elem_title.click()
+            return text_title, prod_price
 
     def get_random_product_card_with_in_stock_status(self):
         prod_cards_list = self.browser.find_elements(*SearchingResultPageLocators.PRODUCT_CARD)
         assert len(prod_cards_list) != 0, \
             "На странице с результатом поиска нет ни одного товара со статусом 'В наличии'"
-        index = randrange(0, len(prod_cards_list))
-        prod_card = prod_cards_list[index]
-        return prod_card, index + 1
-
-    def scroll_to_card(self, card, name):
-        with allure.step(f"Проскроллить до товара: {name}"):
-            action = AC(self.browser)
-            action.scroll_to_element(card)
-            action.perform()
+        prod_card = choice(prod_cards_list)
+        index = prod_card.get_attribute('data-index')
+        return prod_card, index

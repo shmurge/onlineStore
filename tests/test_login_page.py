@@ -2,10 +2,10 @@ import pytest
 import allure
 from pages.login_page import LoginPage
 from utils.data import *
-from time import sleep
 
 
 @pytest.mark.positive
+@pytest.mark.login_page
 class TestLoginPagePositive:
     link = Url.MAIN_PAGE
 
@@ -32,6 +32,7 @@ class TestLoginPagePositive:
 
 
 @pytest.mark.negative
+@pytest.mark.login_page
 class TestLoginPageNegative:
     link = Url.MAIN_PAGE
 

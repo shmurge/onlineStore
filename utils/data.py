@@ -29,6 +29,7 @@ class ButtonsData:
 class Url:
     MAIN_PAGE = "https://quke.ru/"
     PROFILE_PAGE = "https://quke.ru/profile"
+    CART_PAGE = "https://quke.ru/order"
 
 
 class Catalogue:
@@ -36,8 +37,7 @@ class Catalogue:
         "Смартфоны": [["Смартфоны Xiaomi", "Xiaomi"], ["Смартфоны Samsung", "Samsung"], ["Смартфоны Apple", "Apple"],
                       ["Смартфоны Realme", "Realme"], ["Смартфоны Google", "Google"], ["Смартфоны Honor", "Honor"],
                       ["Смартфоны Infinix", "Infinix"], ["Смартфоны OnePlus", "OnePlus"]],
-        "Планшеты, ноутбуки и электронные книги": [["Samsung", "Планшет Samsung"], ["Digma", "Планшет Digma"],
-                                                   ["Lenovo", "Lenovo"]],
+        "Планшеты, ноутбуки и электронные книги": [["Digma", "Планшет Digma"], ["Lenovo", "Lenovo"]],
         "Аксессуары": [["Чехлы для телефона", "Чехол"], ["Защитные стекла для телефонов", "Защитное стекло"],
                        ["Защитные стекла для камер", "Защитное стекло для камеры"],
                        ["Защитные пленки для телефонов", "Защитная пленка"],
@@ -52,5 +52,4 @@ class Catalogue:
 
 class ProductName:
     PRODUCT_NAMES_LIST = ["Xiaomi Redmi Note 13 Pro", "iPhone 15", "Ноутбук Apple",
-                          "Xiaomi Redmi Smart Band Pro Global Black", "Samsung Galaxy Tab", "Наушники Xiaomi",
-                          "Защитное стекло", ]
+                          "Realme", "Наушники Xiaomi"]

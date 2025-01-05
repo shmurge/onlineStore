@@ -8,7 +8,7 @@ from utils.data import *
 
 
 def pytest_addoption(parser):
-    parser.addoption('--browser', action='store', default='chrome', help='Choose browser: chrome or firefox')
+    parser.addoption('--browser', action='store', default='firefox', help='Choose browser: chrome or firefox')
     parser.addoption('--language', action='store', default='ru', help='Choose language: ru or en')
     parser.addoption('--headless', action='store_true', help='Launching the browser in headless mode')
     parser.addoption('--login', action='store_true', help='Launching the browser with pre conditions: login')
@@ -19,7 +19,6 @@ def browser(request):
     browser_name = request.config.getoption("browser")
     user_language = request.config.getoption("language")
     headless = request.config.getoption("--headless")
-    need_login = request.config.getoption("--login")
     browser = None
 
     with allure.step(f"Запуск браузера: {browser_name}.  Язык браузера: {user_language}"):
@@ -36,18 +35,19 @@ def browser(request):
             browser = webdriver.Chrome(options=chrome_options)
         elif browser_name == "firefox":
             firefox_options = FirefoxOptions()
+            firefox_options.add_argument("--disable-notifications")
             firefox_options.set_preference('intl.accept_languages', user_language)
             if headless:
                 with allure.step("Браузер запущен в фоновом режиме"):
-                    firefox_options.headless = True
+                    firefox_options.add_argument("--headless")
+                    firefox_options.add_argument('--disable-gpu')
+                    firefox_options.add_argument('--no-sandbox')
+                    firefox_options.add_argument('--disable-dev-shm-usage')
             browser = webdriver.Firefox(options=firefox_options)
         else:
             raise pytest.UsageError("--browser_name should be chrome or firefox")
 
     browser.maximize_window()
-
-    if need_login:
-        login_in_app(browser)
 
     yield browser
     browser.quit()
@@ -61,6 +61,12 @@ def login_in_app(browser, link=Url.MAIN_PAGE):
         page.user_login(*UsersData.USER_1)
         page.should_be_user_link()
 
+@pytest.fixture(autouse=True)
+def login(browser, request):
+    need_login = request.config.getoption("--login")
+    if need_login:
+        login_in_app(browser, link=Url.MAIN_PAGE)
+
 
 @pytest.fixture(scope="function")
 def preconditions_login(browser, link=Url.MAIN_PAGE):
@@ -73,9 +79,3 @@ def clear_cookies_after_test(browser, flag=True):
         yield
         with allure.step("Очистить все куки"):
             browser.delete_all_cookies()
-
-
-@pytest.fixture(scope="function")
-def get_browser_language(browser):
-    browser_language = browser.execute_script("return navigator.language").upper()
-    return browser_language

@@ -1,9 +1,9 @@
 import allure
 from locators.locs_login_page import LoginPageLocators
 from elements.base_elements import *
-from locators.locs_header_page import HeaderPageLocators
 from pages.header_page import HeaderPage
 from utils.data import *
+from time import sleep
 
 
 class LoginPage(HeaderPage):
@@ -12,6 +12,7 @@ class LoginPage(HeaderPage):
         super().__init__(browser, url, timeout)
 
     def click_sign_in_without_input_filling(self):
+        sleep(0.5)
         self.login_input.click()
         self.password_input.click()
         self.sign_in_button.click()

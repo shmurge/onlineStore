@@ -5,11 +5,7 @@ from elements.base_elements import *
 from locators.locs_header_page import HeaderPageLocators
 from locators.locs_login_page import LoginPageLocators
 from locators.locs_region_page import RegionPageLocators
-from locators.locs_profile_page import ProfilePageLocators
-from locators.locs_product_page import ProductPageLocators
-from locators.locs_cart_page import CartPageLocators
 from utils.data import *
-from selenium.webdriver.common.by import By
 
 
 class HeaderPage(BasePage):

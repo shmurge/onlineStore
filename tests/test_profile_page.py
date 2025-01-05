@@ -1,12 +1,12 @@
 import pytest
 import allure
+from pages.header_page import HeaderPage
 from pages.profile_page import ProfilePage
-from pages.region_page import RegionPage
 from utils.data import *
-from time import sleep
 
 
 @pytest.mark.positive
+@pytest.mark.profile_page
 class TestProfilePagePositive:
     link = Url.PROFILE_PAGE
 
@@ -33,7 +33,7 @@ class TestProfilePagePositive:
     @allure.title("Профиль: Выбор региона")
     @pytest.mark.parametrize('region', ["Москва и МО", "Санкт-Петербург"])
     def test_choose_region_from_profile_page(self, browser, region, preconditions_login, clear_cookies_after_test):
-        page = RegionPage(browser, self.link)
+        page = HeaderPage(browser, self.link)
         page.accept_cookie()
         page.open(self.link)
         page.open_region_modal()

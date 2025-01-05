@@ -14,9 +14,12 @@ class Button:
         self.name = name
         self.locator = how, what
 
+    def get_element(self):
+        return self.browser.find_element(*self.locator)
+
     def click(self):
         with allure.step(f"Клик по: {self.name}"):
-            button = self.browser.find_element(*self.locator)
+            button = self.get_element()
             button.click()
 
     def double_click(self):
@@ -61,6 +64,9 @@ class Input:
         self.name = name
         self.locator = how, what
 
+    def get_element(self):
+        return self.browser.find_element(*self.locator)
+
     def click(self):
         with allure.step(f"Клик по: {self.name}"):
             action = AC(self.browser)
@@ -73,7 +79,7 @@ class Input:
 
     def clear_input(self):
         action = AC(self.browser)
-        input_1 = self.browser.find_element(*self.locator)
+        input_1 = self.get_element()
         input_value = input_1.get_attribute("value")
         with allure.step(f"Очистить: {self.name}"):
             while len(input_value) > 0:
@@ -82,9 +88,8 @@ class Input:
                 input_value = input_1.get_attribute("value")
 
     def send_keys_in_input(self, data):
-        input_1 = None
         action = AC(self.browser)
-        input_1 = self.browser.find_element(*self.locator)
+        input_1 = self.get_element()
         with allure.step(f"Ввод данных в {self.name}"):
             action.double_click(input_1)
             action.send_keys_to_element(input_1, data).perform()

@@ -1,16 +1,13 @@
 import allure
+import pytest
 from random import *
 from re import *
 from selenium.webdriver.common.action_chains import ActionChains as AC
 from pages.header_page import HeaderPage
 from elements.base_elements import *
-from locators.locs_region_page import RegionPageLocators
 from locators.locs_header_page import HeaderPageLocators
-from locators.locs_login_page import LoginPageLocators
-from locators.locs_profile_page import ProfilePageLocators
-from locators.locs_product_page import ProductPageLocators
-from locators.locs_catalogue_page import CataloguePageLocators
 from locators.locs_cart_page import CartPageLocators
+from utils.api_features import PrepareData
 from utils.data import *
 
 
@@ -88,3 +85,17 @@ class CartPage(HeaderPage):
             rm_button = self.browser.find_element(*CartPageLocators.construction_delete_position_button(rand_id))
             rm_button.click()
             return id_and_title[rand_id]
+
+    # def precond_add_prods_to_cart(self, *args):
+    #     with allure.step(f"Предусловия: добавление товаров корзину через API"):
+    #         func = PrepareData()
+    #         sessid = self.get_php_sessid()
+    #         for arg in args:
+    #             func.add_prod_to_cart(sessid, arg)
+
+    def precond_add_prods_to_cart(self, *args):
+        with allure.step(f"Предусловия: добавление товаров корзину через API"):
+            func = PrepareData()
+            jsp = self.get_cookie_jsp()
+            for arg in args:
+                func.add_prod_to_cart(jsp, arg)

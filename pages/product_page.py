@@ -1,12 +1,8 @@
 import allure
 from selenium.webdriver.common.action_chains import ActionChains as AC
-from locators.locs_region_page import RegionPageLocators
-from elements.base_elements import *
-from locators.locs_header_page import HeaderPageLocators
-from locators.locs_login_page import LoginPageLocators
-from locators.locs_profile_page import ProfilePageLocators
 from locators.locs_product_page import ProductPageLocators
 from pages.header_page import HeaderPage
+from elements.base_elements import *
 from utils.data import *
 
 
@@ -18,6 +14,8 @@ class ProductPage(HeaderPage):
         self.buy_button = Button(self.browser, "Кнопка Купить", *ProductPageLocators.BUY_BUTTON)
         self.go_to_cart_button = Button(self.browser, "Кнопка Перейти в корзину",
                                         *ProductPageLocators.GO_TO_CART_BUTTON)
+        self.place_an_order_button = Button(self.browser, "Кнопка Оформить заказ",
+                                            *ProductPageLocators.PRODUCT_ADDED_MODAL_PLACE_AN_ORDER_BUTTON)
 
     def should_be_correct_product_title_on_prod_page(self, exp_res):
         with allure.step("Сравнение наименования товара в карточке и на странице товара"):
@@ -37,17 +35,16 @@ class ProductPage(HeaderPage):
         return prod_title, prod_price
 
     def add_to_cart(self, title):
-        with allure.step(f"Добавить в корзину товар: {title}"):
-            self.scroll_to_element(*ProductPageLocators.BUY_BUTTON, title)
+        with allure.step(f"Добавить в корзину товар: {title} и перейти в корзину"):
             self.buy_button.click()
+            try:
+                self.browser.implicitly_wait(1)
+                sleep(0.5)
+                self.place_an_order_button.click()
+            except:
+                pass
 
     def go_to_cart(self):
         with allure.step("Перейти в корзину"):
-            self.scroll_to_element(*self.go_to_cart_button.locator, self.go_to_cart_button.name)
+            self.scroll_to_element(self.go_to_cart_button, self.go_to_cart_button.name)
             self.go_to_cart_button.click()
-
-    def check_buy_button_text(self, exp_res):
-        self.buy_button.check_button_text(exp_res)
-
-    def check_go_to_cart_button_text(self, exp_res):
-        self.go_to_cart_button.check_button_text(exp_res)
