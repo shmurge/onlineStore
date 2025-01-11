@@ -8,7 +8,7 @@ from utils.data import *
 
 
 def pytest_addoption(parser):
-    parser.addoption('--browser', action='store', default='firefox', help='Choose browser: chrome or firefox')
+    parser.addoption('--browser', action='store', default='chrome', help='Choose browser: chrome or firefox')
     parser.addoption('--language', action='store', default='ru', help='Choose language: ru or en')
     parser.addoption('--headless', action='store_true', help='Launching the browser in headless mode')
     parser.addoption('--login', action='store_true', help='Launching the browser with pre conditions: login')

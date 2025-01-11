@@ -83,19 +83,13 @@ class CartPage(HeaderPage):
         rand_id = choice(list(id_and_title.keys()))
         with allure.step(f"Удалить из корзины позицию {id_and_title[rand_id]}"):
             rm_button = self.browser.find_element(*CartPageLocators.construction_delete_position_button(rand_id))
+            self.scroll_to_element(rm_button, "Кнопка Удалить")
             rm_button.click()
             return id_and_title[rand_id]
-
-    # def precond_add_prods_to_cart(self, *args):
-    #     with allure.step(f"Предусловия: добавление товаров корзину через API"):
-    #         func = PrepareData()
-    #         sessid = self.get_php_sessid()
-    #         for arg in args:
-    #             func.add_prod_to_cart(sessid, arg)
 
     def precond_add_prods_to_cart(self, *args):
         with allure.step(f"Предусловия: добавление товаров корзину через API"):
             func = PrepareData()
-            jsp = self.get_cookie_jsp()
+            sessid = self.get_php_sessid()
             for arg in args:
-                func.add_prod_to_cart(jsp, arg)
+                func.add_prod_to_cart(sessid, arg)

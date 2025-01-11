@@ -144,9 +144,6 @@ class BasePage:
         php_sessid = self.browser.get_cookie('PHPSESSID')
         return f"{php_sessid['name']}={php_sessid['value']}"
 
-    def get_cookie_jsp(self):
-        jsp = self.browser.get_cookie('__js_p_')
-        return f"{jsp['name']}={jsp['value']}"
-
-    def get_browser_name(self, browser):
+    @staticmethod
+    def get_browser_name(browser):
         return browser.name
