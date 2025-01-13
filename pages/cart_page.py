@@ -34,7 +34,7 @@ class CartPage(HeaderPage):
 
     def should_not_be_position_in_cart(self, title):
         title_list = [elem.text.strip() for elem in self.browser.find_elements(*CartPageLocators.PROD_TITLE)]
-        assert title not in title_list, (f"Позиция: {title} отображается в корзине, но должна быть удалена!"
+        assert title not in title_list, (f"Позиция: {title} отображается в корзине, но должна быть удалена! "
                                          f"Содержимое корзины: {title_list}")
 
     # Подсчет стоимости каждой позиции в корзине и сравнение с итоговой стоимостью корзины
