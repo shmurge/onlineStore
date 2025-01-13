@@ -39,20 +39,6 @@ wheel                 0.41.2\
 wsproto               1.2.0\
 
 ## Структура проекта
-OnlineStore
-│
-├── tests/                # Папка с тестами
-│   ├── test_login.py     # Тесты входа в систему
-│   ├── test_checkout.py   # Тесты оформления заказа
-│   └── ...
-│
-├── pages/                # Модули страниц
-│   ├── login_page.py     # Страница входа
-│   ├── checkout_page.py  # Страница оформления заказа
-│   └── ...
-│
-├── utils/                # Утилиты для тестирования
-│   └── helpers.py        # Вспомогательные функции
-│
-├── requirements.txt      # Зависимости
-└── README.md             # Этот файл
++ :file_folder: **OnlineStore** *# Репозиторий*
+  + :file_folder: **elements** *# Элементы страниц*
+    + :page_facing_up: **base_elements** *# Базовые (кнопка, инпут и т.д.)*
