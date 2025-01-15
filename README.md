@@ -38,29 +38,16 @@ websocket-client      1.8.0\
 wheel                 0.41.2\
 wsproto               1.2.0\
 
+## Драйверы
+chromedriver (Browser Chrome)\
+geckodriver (Browser Firefox)
+
 ## Структура проекта
 + :file_folder: **OnlineStore** *# Репозиторий*
   + :file_folder: **elements** *# Элементы интерфейса*
     + :page_facing_up: **base_elements** *# Универсальные (кнопка, инпут и т.д.)*
   + :file_folder: **locators** *# Локаторы на страницах*
-    + :page_facing_up: **locs_base_page** *# Универсальные локаторы*
-    + :page_facing_up: **locs_cart_page** *# Локаторы страницы Корзина*
-    + :page_facing_up: **locs_catalogue_page** *# Локаторы каталога*
-    + :page_facing_up: **locs_header_page** *# Локаторы хэдера*
-    + :page_facing_up: **locs_login_page** *# Локаторы страницы авторизации*
-    + :page_facing_up: **locs_product_page** *# Локаторы страницы товара*
-    + :page_facing_up: **locs_profile_page** *# Локаторы страницы профиля*
-    + :page_facing_up: **locs_region_page** *# Локаторы страницы региона*
-    + :page_facing_up: **locs_searching_result_page** *# Локаторы страницы с результатами поиска*
   + :file_folder: **pages** *# Методы взаимодействия и условия проверок*
-    + :page_facing_up: **base_page** *# Универсальные методы*
-    + :page_facing_up: **cart_page** *# Методы страницы Корзина*
-    + :page_facing_up: **catalogue_page** *# Методы каталога*
-    + :page_facing_up: **header_page** *# Методы хэдера*
-    + :page_facing_up: **login_page** *# Методы страницы авторизации*
-    + :page_facing_up: **product_page** *# Методы страницы товара*
-    + :page_facing_up: **profile_page** *# Методы страницы профиля*
-    + :page_facing_up: **searching_result_page** *# Методы страницы с результатами поиска*
   + :file_folder: **tests** *# Тесты*
     + :page_facing_up: **test_cart_page** *# Тесты страницы Корзина*
     + :page_facing_up: **test_login_page** *# Тесты страницы авторизации*
@@ -73,3 +60,17 @@ wsproto               1.2.0\
   + :page_facing_up: **conftest** *# Конфигурация тестов, фикстуры*
   + :page_facing_up: **pytest.ini** *# Файл конфигурации Pytest*
   + :page_facing_up: **requirements.txt** *# Зависимости*
+
+### Схема наследования классов
+
+graph LR
+base_page --> delete_account_page;
+base_page --> login_page;
+base_page --> registration_page;
+base_page --> office_page;
+base_page --> main_page;
+base_page --> booking_page;
+booking_page --> modal_window;
+base_page --> colleagues_page;
+base_page --> colleagues_page;
+base_page --> profile_page;
