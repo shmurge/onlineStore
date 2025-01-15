@@ -61,16 +61,19 @@ geckodriver (Browser Firefox)
   + :page_facing_up: **pytest.ini** *# Файл конфигурации Pytest*
   + :page_facing_up: **requirements.txt** *# Зависимости*
 
-### Схема наследования классов
+### Схема проектирования
 
+```mermaid
+---
+title: PageObject model
+---
 graph LR
-base_page --> delete_account_page;
-base_page --> login_page;
-base_page --> registration_page;
-base_page --> office_page;
-base_page --> main_page;
-base_page --> booking_page;
-booking_page --> modal_window;
-base_page --> colleagues_page;
-base_page --> colleagues_page;
-base_page --> profile_page;
+base_page --> header_page;
+header_page --> login_page;
+header_page --> profile_page;
+header_page --> main_page;
+header_page --> catalogue_page;
+header_page --> searching_result_page;
+header_page --> product_page;
+header_page --> cart_page;
+```
