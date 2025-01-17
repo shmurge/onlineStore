@@ -164,19 +164,20 @@ geckodriver --version\
 Теперь вы готовы использовать GeckoDriver с Selenium для автоматизации браузера Firefox!
 
 ## Запуск тестов
-```cd tests```
-+ Для запуска в браузере chrome (по умолчанию установлен chrome)\
+Используйте следующие скрипты\
++ ```cd tests``` для перехода в директорию с тестами
++ Для запуска в браузере chrome (по умолчанию установлен chrome):\
 ```pytest -v -s --tb=line --reruns=3 --headless --alluredir allure_report```\
 где reruns - количество перезапусков теста в случае падения\
 --headless фоновый режим работы браузера (для запуска в обычном режиме уберите параметр --headless)
 --alluredir allure_report создает директорию allure_report в корне проекта с отчетом по прогону
-+ Для запуска в браузере firefox\
++ Для запуска в браузере firefox:\
 ```pytest -v -s --tb=line --reruns=3 --browser=firefox --headless --alluredir allure_report```
-+ Для запуска тестов с предусловием логина используйте параметры --login -m=may_be_login
++ Для запуска тестов с предусловием логина используйте параметры --login -m=may_be_login:\
 ```pytest -v -s --tb=line --reruns=3 --headless --login -m=may_be_login --alluredir allure_report```\
 или\
 ```pytest -v -s --tb=line --reruns=3 --browser=firefox --headless --login -m=may_be_login --alluredir allure_report```
-+ Для запуска отчета по прогону
++ Для запуска отчета по прогону:\
 ```allure serve allure_report```\
 после перейдите в браузер (если редирект не произошел автоматически)\
 перед следующим прогоном рекомендуется очистить директорию allure_report
