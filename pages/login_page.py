@@ -12,7 +12,7 @@ class LoginPage(HeaderPage):
         super().__init__(browser, url, timeout)
 
     def click_sign_in_without_input_filling(self):
-        sleep(0.5)
+        sleep(0.5) # sleep добавлен из-за особенности работы firefox (или защиты приложения от автоматизации)
         self.login_input.click()
         self.password_input.click()
         self.sign_in_button.click()

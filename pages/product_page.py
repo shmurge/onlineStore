@@ -3,6 +3,7 @@ from selenium.webdriver.common.action_chains import ActionChains as AC
 from locators.locs_product_page import ProductPageLocators
 from pages.header_page import HeaderPage
 from elements.base_elements import *
+from time import sleep
 from utils.data import *
 
 
@@ -39,7 +40,7 @@ class ProductPage(HeaderPage):
             self.buy_button.click()
             try:
                 self.browser.implicitly_wait(1)
-                sleep(0.5)
+                sleep(0.5) # sleep добавлен из-за особенности работы модального окна
                 self.place_an_order_button.click()
             except:
                 pass
