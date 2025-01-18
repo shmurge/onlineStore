@@ -33,8 +33,20 @@ jobs:
         if: "github.event.inputs.deployment_target == 'firefox-without-auth' || 
         github.event.inputs.deployment_target == 'firefox-with-auth'"
         run: |
-          sudo apt-get update
-          sudo apt-get install -y firefox
+           sudo apt-get update
+           sudo apt-get install -y firefox
+           # Установка geckodriver
+           sudo apt-get install -y geckodriver
+
+      - name: Set environment variables for Firefox
+        if: "github.event.inputs.deployment_target == 'firefox-without-auth' || github.event.inputs.deployment_target == 'firefox-with-auth'"
+        run: echo "FIREFOX_EXECUTABLE_PATH=/snap/bin/geckodriver" >> $GITHUB_ENV
+#      - name: Install Firefox
+#        if: "github.event.inputs.deployment_target == 'firefox-without-auth' ||
+#        github.event.inputs.deployment_target == 'firefox-with-auth'"
+#        run: |
+#          sudo apt-get update
+#          sudo apt-get install -y firefox
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: chrome-without-auth
