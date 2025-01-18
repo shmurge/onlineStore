@@ -3,6 +3,7 @@ import allure
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.firefox.service import Service as FirefoxService
 from pages.login_page import LoginPage
 from utils.data import *
 
@@ -35,6 +36,7 @@ def browser(request):
             browser = webdriver.Chrome(options=chrome_options)
         elif browser_name == "firefox":
             firefox_options = FirefoxOptions()
+            firefox_service = FirefoxService(executable_path="/usr/local/bin/geckodriver") #если сломается, убрать эту строку
             firefox_options.add_argument("--disable-notifications")
             firefox_options.set_preference('intl.accept_languages', user_language)
             if headless:
@@ -43,7 +45,7 @@ def browser(request):
                     firefox_options.add_argument('--disable-gpu')
                     firefox_options.add_argument('--no-sandbox')
                     firefox_options.add_argument('--disable-dev-shm-usage')
-            browser = webdriver.Firefox(options=firefox_options)
+            browser = webdriver.Firefox(options=firefox_options, service=firefox_service) # и отсюда убрать service
         else:
             raise pytest.UsageError("--browser_name should be chrome or firefox")
 
