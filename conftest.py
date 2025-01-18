@@ -36,7 +36,7 @@ def browser(request):
             browser = webdriver.Chrome(options=chrome_options)
         elif browser_name == "firefox":
             firefox_options = FirefoxOptions()
-            firefox_service = FirefoxService(executable_path="/usr/local/bin/geckodriver") #если сломается, убрать эту строку
+            firefox_service = FirefoxService(executable_path="/snap/bin/geckodriver") #если сломается, убрать эту строку
             firefox_options.add_argument("--disable-notifications")
             firefox_options.set_preference('intl.accept_languages', user_language)
             if headless:
