@@ -89,6 +89,7 @@ class CartPage(HeaderPage):
 
     def precond_add_prods_to_cart(self, *args):
         with allure.step(f"Предусловия: добавление товаров корзину через API"):
+            self.is_element_visible(*HeaderPageLocators.CART_BUTTON)
             func = PrepareData()
             sessid = self.get_php_sessid()
             for arg in args:
