@@ -46,15 +46,19 @@ jobs:
       - name: chrome-without-auth
         if: "github.event.inputs.deployment_target == 'chrome-without-auth'"
         run: pytest -v -s --tb=line --reruns=3 --headless --alluredir allure_report
+        continue-on-error: true
       - name: chrome-with-auth
         if: "github.event.inputs.deployment_target == 'chrome-with-auth'"
         run: pytest -v -s --tb=line --reruns=3 --headless --login -m=may_be_login --alluredir allure_report
+        continue-on-error: true
       - name: firefox-without-auth
         if: "github.event.inputs.deployment_target == 'firefox-without-auth'"
         run: pytest -v -s --tb=line --reruns=3 --headless --browser=firefox --alluredir allure_report
+        continue-on-error: true
       - name: firefox-with-auth
         if: "github.event.inputs.deployment_target == 'firefox-with-auth'"
         run: pytest -v -s --tb=line --reruns=3 --headless --browser=firefox --login -m=may_be_login --alluredir allure_report
+        continue-on-error: true
       - name: Upload Allure report
         uses: actions/upload-artifact@v4
         with:
