@@ -13,6 +13,7 @@ def pytest_addoption(parser):
     parser.addoption('--language', action='store', default='ru', help='Choose language: ru or en')
     parser.addoption('--headless', action='store_true', help='Launching the browser in headless mode')
     parser.addoption('--login', action='store_true', help='Launching the browser with pre conditions: login')
+    parser.addoption('--github_actions', action='store_true', help='Launching on Firefox in github actions')
 
 
 @pytest.fixture(scope="session")
@@ -20,6 +21,7 @@ def browser(request):
     browser_name = request.config.getoption("browser")
     user_language = request.config.getoption("language")
     headless = request.config.getoption("--headless")
+    github_actions = request.config.getoption("--github_actions")
     browser = None
 
     with allure.step(f"Запуск браузера: {browser_name}.  Язык браузера: {user_language}"):
@@ -45,8 +47,10 @@ def browser(request):
                     firefox_options.add_argument('--disable-gpu')
                     firefox_options.add_argument('--no-sandbox')
                     firefox_options.add_argument('--disable-dev-shm-usage')
-            browser = webdriver.Firefox(options=firefox_options, service=firefox_service) # и отсюда убрать service
-            # browser = webdriver.Firefox(options=firefox_options)
+            if github_actions:
+                browser = webdriver.Firefox(options=firefox_options, service=firefox_service) # и отсюда убрать service
+            else:
+                browser = webdriver.Firefox(options=firefox_options)
         else:
             raise pytest.UsageError("--browser_name should be chrome or firefox")
 
