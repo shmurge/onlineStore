@@ -51,7 +51,7 @@ jobs:
         continue-on-error: true
       - run: mkdir allure_report && unzip artifacts.zip -d allure_report
         continue-on-error: true
-      - run: mkdir old_pages pages_history && unzip pages.zip -d old_pages && tar -xvf old_pages/artifact.tar -c pages_history
+      - run: mkdir old_pages pages_history && unzip pages.zip -d old_pages && tar -xvf old_pages/artifact.tar -C pages_history
         continue-on-error: true
       - run: cp pages_history/history/* allure_report && cp -r pages_history/history allure report
         continue-on-error: true
