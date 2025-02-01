@@ -115,7 +115,7 @@ jobs:
           name: allure_report
           path:
             allure_report
-          retention-days: 1
+          retention-days: 30
           overwrite: true
 
   generate-allure-report:
