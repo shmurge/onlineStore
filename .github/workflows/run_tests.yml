@@ -28,7 +28,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: |-
+      - run: |
           ARTIFACT_ID=$(curl -L 
           -H "Accept: application/vnd.github+json" 
           "https://api.github.com/repos/shmurge/onlineStore/actions/artifacts?name=allure_report" | 
