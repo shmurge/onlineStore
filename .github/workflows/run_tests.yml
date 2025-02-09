@@ -63,7 +63,7 @@ jobs:
           name: allure_report
           path:
             allure_report
-          retention-days: 10
+          retention-days: 5
 
   test-run:
     name: Test run
@@ -115,7 +115,7 @@ jobs:
           name: allure_report
           path:
             allure_report
-          retention-days: 10
+          retention-days: 5
           overwrite: true
 
   generate-allure-report:
@@ -141,7 +141,7 @@ jobs:
           name: _site
           path:
             _site
-          retention-days: 10
+          retention-days: 5
 
   publish-allure-report:
     name: Publication allure-report
