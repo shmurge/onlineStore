@@ -2,26 +2,32 @@ name: Delete all artifacts
 
 on:
   workflow_dispatch:
-    inputs:
-      deployment_target:
-        description: Choose target
-        required: true
-        default:
-        type: choice
-        options:
-          - delete-all
 
 jobs:
-  clear-history:
-    name: Clear Allure report history
+  cleanup:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Delete artifacts
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          # Получаем список артефактов
+          artifacts=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \ 
+          "https://api.github.com/repos/shmurge/onlineStore/actions/artifacts")
+
+          # Извлекаем ID артефактов и удаляем их
+          echo "$artifacts" | jq -c '.artifacts[]' | while read -r artifact; do
+            artifact_id=$(echo "$artifact" | jq -r '.id')
+            artifact_name=$(echo "$artifact" | jq -r '.name')
+            
+            # Удаляем артефакт
+            response=$(curl -s -X DELETE -H "Authorization: token $GITHUB_TOKEN" \ 
+            "https://api.github.com/repos/shmurge/onlineStore/actions/artifacts/$artifact_id")
+            
+            if [ $(echo "$response" | jq -r '.message') == "Not Found" ]; then
+              echo "Артефакт $artifact_name успешно удален."
+            else
+              echo "Ошибка при удалении артефакта $artifact_name: $(echo "$response" | jq -r '.message')"
+            fi
+          done
