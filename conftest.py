@@ -16,7 +16,7 @@ def pytest_addoption(parser):
     parser.addoption('--github_actions', action='store_true', help='Launching on Firefox in github actions')
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def browser(request):
     browser_name = request.config.getoption("browser")
     user_language = request.config.getoption("language")
