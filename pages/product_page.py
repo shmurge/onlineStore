@@ -19,6 +19,7 @@ class ProductPage(HeaderPage):
                                             *ProductPageLocators.PRODUCT_ADDED_MODAL_PLACE_AN_ORDER_BUTTON)
 
     def should_be_correct_product_title_on_prod_page(self, exp_res):
+        self.is_element_visible(*ProductPageLocators.PRODUCT_TITLE)
         with allure.step("Сравнение наименования товара в карточке и на странице товара"):
             act_res = self.browser.find_element(*ProductPageLocators.PRODUCT_TITLE).text.strip()
             assert exp_res.lower() in act_res.lower(), (f"Некорректное наименование товара!"
