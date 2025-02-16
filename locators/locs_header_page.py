@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 
 
 class HeaderPageLocators:
-    QUKE_LOGO = (By.XPATH, '//*[@class="h-logo__img"]')
+    QUKE_LOGO = (By.XPATH, '//*[@class="h-logo__img h-logo-decor"]')
 
     LOGIN_LINK = (By.XPATH, '//*[@class="h-user__text"]')
     USER_LINK = (By.XPATH, '//*[@class="h-user__link"]')

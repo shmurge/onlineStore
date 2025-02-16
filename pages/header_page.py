@@ -10,8 +10,8 @@ from utils.data import *
 
 class HeaderPage(BasePage):
 
-    def __init__(self, browser, url, timeout=10):
-        super().__init__(browser, url, timeout)
+    def __init__(self, browser, url):
+        super().__init__(browser, url)
 
         # login
         self.login_link = Button(self.browser, "Линк на форму логина", *HeaderPageLocators.LOGIN_LINK)
@@ -36,7 +36,7 @@ class HeaderPage(BasePage):
     def go_to_login_page(self):
         with allure.step("Переход на страницу логина"):
             self.login_link.click()
-        self.should_be_login_form()
+            self.should_be_login_form()
 
     def should_be_login_form(self):
         with allure.step("Проверка наличия формы для авторизации"):
@@ -79,7 +79,7 @@ class HeaderPage(BasePage):
     def should_be_correct_region_in_header(self, exp_res):
         with (allure.step("Проверка корректности выбранного региона")):
             self.is_element_visible(*HeaderPageLocators.REGION_NAME_IN_HEADER)
-            act_res = self.browser.find_element(*HeaderPageLocators.REGION_NAME_IN_HEADER).text
+            act_res = self.get_element(*HeaderPageLocators.REGION_NAME_IN_HEADER).text
             assert act_res in exp_res, \
                 f'В хэдере отображается некорректный регион ОР: {exp_res} ФР: {act_res}'
 
@@ -101,7 +101,7 @@ class HeaderPage(BasePage):
 
     def get_product_type(self, item):
         element = None
-        items_list = self.browser.find_elements(*HeaderPageLocators.CATALOGUE_LEFT_SIDEBAR_ITEMS)
+        items_list = self.get_elements_list(*HeaderPageLocators.CATALOGUE_LEFT_SIDEBAR_ITEMS)
         for el in items_list:
             if item.lower() == el.text.lower():
                 element = el
@@ -117,6 +117,6 @@ class HeaderPage(BasePage):
             self.cart_button.click()
 
     def check_quantity_positions_in_cart(self, exp_res):
-        act_res = int(self.browser.find_element(*HeaderPageLocators.CART_ORDER_COUNTER).text.strip())
+        act_res = int(self.get_element(*HeaderPageLocators.CART_ORDER_COUNTER).text.strip())
         with allure.step("Хедер: Проверка количества позиций в корзине"):
             assert exp_res == act_res, f"Некорректное количество позиций в корзине! ОР: {exp_res}, ФР: {act_res}"

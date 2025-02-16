@@ -8,8 +8,8 @@ from time import sleep
 
 class LoginPage(HeaderPage):
 
-    def __init__(self, browser, url, timeout=10):
-        super().__init__(browser, url, timeout)
+    def __init__(self, browser, url):
+        super().__init__(browser, url)
 
     def click_sign_in_without_input_filling(self):
         sleep(0.5) # sleep добавлен из-за особенности работы firefox (или защиты приложения от автоматизации)

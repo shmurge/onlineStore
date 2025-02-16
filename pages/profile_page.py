@@ -7,8 +7,8 @@ from utils.data import *
 
 class ProfilePage(HeaderPage):
 
-    def __init__(self, browser, url, timeout=10):
-        super().__init__(browser, url, timeout)
+    def __init__(self, browser, url):
+        super().__init__(browser, url)
 
         self.logout_button = Button(self.browser, "Кнопка Выйти из аккаунта", *ProfilePageLocators.LOGOUT_BUTTON)
 
@@ -24,14 +24,14 @@ class ProfilePage(HeaderPage):
     def should_be_correct_username_in_profile_card(self):
         with allure.step("Проверка корректности имени пользователя в карточке профиля"):
             exp_res = UsersData.USER_1_NAME
-            act_res = self.browser.find_element(*ProfilePageLocators.USER_NAME).text
+            act_res = self.get_element(*ProfilePageLocators.USER_NAME).text
             assert exp_res == act_res, (f'Некорректное имя пользователя в карточке профиля! '
                                         f'ОР: {exp_res}, ФР: {act_res}')
 
     def should_be_correct_email_in_profile_card(self):
         with allure.step("Проверка корректности email в карточке профиля"):
             exp_res = UsersData.USER_1[0]
-            act_res = self.browser.find_element(*ProfilePageLocators.USER_EMAIL).text
+            act_res = self.get_element(*ProfilePageLocators.USER_EMAIL).text
             assert exp_res == act_res, (f'Некорректный email в карточке профиля! '
                                         f'ОР: {exp_res}, ФР: {act_res}')
 

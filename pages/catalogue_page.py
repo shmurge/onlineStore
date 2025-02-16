@@ -9,25 +9,23 @@ from utils.data import *
 
 class CataloguePage(HeaderPage):
 
-    def __init__(self, browser, url, timeout=10):
-        super().__init__(browser, url, timeout)
+    def __init__(self, browser, url):
+        super().__init__(browser, url)
 
     def check_searching_result(self, exp_res):
         with allure.step(f"Проверка результатов поиска товара: {exp_res}"):
-            product_list = self.browser.find_elements(*CataloguePageLocators.PRODUCT_CARD_PRODUCT_TITLE)
+            product_list = self.get_elements_list(*CataloguePageLocators.PRODUCT_CARD_PRODUCT_TITLE)
             for el in product_list:
                 assert exp_res.lower() in el.text.lower(), (f"Некорректный результат поиска в списке товаров! "
                                                             f"Товар: {el.text} не содержит подстроки: {exp_res}")
 
     def select_random_product_card(self):
         with allure.step("Выбор произвольной карточки товара со статусом 'В наличии'"):
-            self.is_element_visible(*CataloguePageLocators.PRODUCT_CARD)
             prod_card, index = self.get_random_product_card_with_in_stock_status()
-            elem_title = self.browser.find_element(*CataloguePageLocators.construction_title_locator(index))
+            elem_title = self.get_element(*CataloguePageLocators.construction_title_locator(index))
             text_title = elem_title.text.strip()
             # парсим цену без точки в конце
-            prod_price = (self.browser.find_element(
-                *CataloguePageLocators.construction_price_locator(index)).text.strip())[:-1]
+            prod_price = self.get_element(*CataloguePageLocators.construction_price_locator(index)).text.strip()[:-1]
             self.scroll_to_element(elem_title, text_title)
             with allure.step(f"Клик по карточке товара: {text_title}"):
                 if elem_title.is_displayed():
@@ -35,7 +33,7 @@ class CataloguePage(HeaderPage):
             return text_title, prod_price
 
     def get_random_product_card_with_in_stock_status(self):
-        prod_cards_list = self.browser.find_elements(*CataloguePageLocators.PRODUCT_CARD)
+        prod_cards_list = self.get_elements_list(*CataloguePageLocators.PRODUCT_CARD)
         assert len(prod_cards_list) != 0, "На странице каталога нет ни одного товара со статусом 'В наличии'"
         prod_card = choice(prod_cards_list)
         index = prod_card.get_attribute('data-index')
