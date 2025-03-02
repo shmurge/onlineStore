@@ -1,10 +1,7 @@
-import allure
 from random import *
-from selenium.webdriver.common.action_chains import ActionChains as AC
 from elements.base_elements import *
 from pages.header_page import HeaderPage
 from locators.locs_searching_result_page import SearchingResultPageLocators
-from utils.data import *
 
 
 class SearchingResultPage(HeaderPage):

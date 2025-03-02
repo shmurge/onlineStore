@@ -1,15 +1,10 @@
-import allure
-import pytest
 from random import *
 from re import *
-from selenium.webdriver.common.action_chains import ActionChains as AC
 from pages.header_page import HeaderPage
 from elements.base_elements import *
 from locators.locs_header_page import HeaderPageLocators
 from locators.locs_cart_page import CartPageLocators
 from utils.api_features import PrepareData
-from utils.data import *
-from time import sleep
 
 
 class CartPage(HeaderPage):

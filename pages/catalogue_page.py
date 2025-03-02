@@ -1,10 +1,8 @@
-import allure
 from random import *
-from selenium.webdriver.common.action_chains import ActionChains as AC
 from elements.base_elements import *
 from locators.locs_catalogue_page import CataloguePageLocators
 from pages.header_page import HeaderPage
-from utils.data import *
+from src.data.data import *
 
 
 class CataloguePage(HeaderPage):

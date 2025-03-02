@@ -1,11 +1,8 @@
-from time import sleep
-import allure
 import pytest
 from random import *
-from pages.base_page import BasePage
 from pages.cart_page import CartPage
 from utils.api_features import *
-from utils.data import *
+from src.data.data import *
 from utils.data_for_api import *
 
 

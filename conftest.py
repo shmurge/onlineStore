@@ -5,7 +5,7 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from pages.login_page import LoginPage
-from utils.data import *
+from src.data.data import *
 
 
 def pytest_addoption(parser):

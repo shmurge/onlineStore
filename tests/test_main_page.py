@@ -8,7 +8,7 @@ from pages.profile_page import ProfilePage
 from pages.catalogue_page import CataloguePage
 from pages.searching_result_page import SearchingResultPage
 from pages.product_page import ProductPage
-from utils.data import *
+from src.data.data import *
 
 
 @pytest.mark.positive

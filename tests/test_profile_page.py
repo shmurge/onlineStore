@@ -2,7 +2,7 @@ import pytest
 import allure
 from pages.header_page import HeaderPage
 from pages.profile_page import ProfilePage
-from utils.data import *
+from src.data.data import *
 
 
 @pytest.mark.positive

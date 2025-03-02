@@ -69,20 +69,6 @@ class BasePage:
             return False
         return True
 
-    def waiting_element_clickable(self, locator: tuple[str, str], timeout: float = 5.0):
-        try:
-            WebDriverWait(self.browser, timeout).until(EC.element_to_be_clickable(locator))
-        except TimeoutException:
-            return False
-        return True
-
-    def waiting_attribute_in_element(self, locator: tuple[str, str], attribute: str, timeout: float = 1.0):
-        try:
-            WebDriverWait(self.browser, timeout).until(EC.element_attribute_to_include(locator, attribute))
-        except TimeoutException:
-            return False
-        return True
-
     def search_element_by_text(self, text):
         with allure.step(f'Поиск элемента: {text}'):
             self.is_element_visible(By.XPATH, f"//*[text()='{text}']")
@@ -97,8 +83,7 @@ class BasePage:
 
     def move_to_element(self, how, what, name):
         with allure.step(f"Навести курсор на элемент: {name}"):
-            self.is_element_visible(how, what)
-            element = self.browser.find_element(how, what)
+            element = self.get_element(how, what)
             action = AC(self.browser)
             action.move_to_element(element)
             action.perform()
@@ -109,7 +94,7 @@ class BasePage:
             if browser_name == "firefox":
                 self.browser.execute_script("document.documentElement.style.scrollBehavior = 'smooth';")
                 self.browser.execute_script("arguments[0].scrollIntoView();", element)
-                sleep(0.5)
+                sleep(0.5) # из-за особенности скролла в firefox пришлось добавить sleep
             elif browser_name == "chrome":
                 action = AC(self.browser)
                 action.scroll_to_element(element).perform()

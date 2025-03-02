@@ -1,8 +1,7 @@
-import allure
 from pages.header_page import HeaderPage
 from elements.base_elements import *
 from locators.locs_profile_page import ProfilePageLocators
-from utils.data import *
+from src.data.data import *
 
 
 class ProfilePage(HeaderPage):

@@ -1,7 +1,7 @@
 import pytest
 import allure
 from pages.login_page import LoginPage
-from utils.data import *
+from src.data.data import *
 
 
 @pytest.mark.positive

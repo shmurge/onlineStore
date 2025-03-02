@@ -1,8 +1,7 @@
-import allure
 from locators.locs_login_page import LoginPageLocators
 from elements.base_elements import *
 from pages.header_page import HeaderPage
-from utils.data import *
+from src.data.data import *
 from time import sleep
 
 

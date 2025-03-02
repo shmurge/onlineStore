@@ -1,11 +1,8 @@
-import allure
-from selenium.webdriver.common.action_chains import ActionChains as AC
 from pages.base_page import BasePage
 from elements.base_elements import *
 from locators.locs_header_page import HeaderPageLocators
 from locators.locs_login_page import LoginPageLocators
 from locators.locs_region_page import RegionPageLocators
-from utils.data import *
 
 
 class HeaderPage(BasePage):
