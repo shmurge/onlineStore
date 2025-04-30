@@ -18,7 +18,7 @@ class HeaderPageLocators:
     MAIN_SEARCH_INPUT = (By.XPATH, '//*[@id="main-search-input"]')
     SEARCH_BUTTON_IN_MAIN_SEARCH_INPUT = (By.XPATH, '//*[@class="h-search__btn"]')
 
-    CATALOGUE_BUTTON = (By.XPATH, '//*[@class="main-nav-v2__toggle"]')
+    CATALOGUE_BUTTON = (By.XPATH, '//*[contains(@class, "main-nav-v2__catalog--desc")]')
     CATALOGUE_CLOSE_BUTTON = (By.XPATH, '//*[contains(@class, "__toggle-cross")]')
     CATALOGUE_MODAL = (By.XPATH, '//*[@class="cat-nav__inner"]')
     CATALOGUE_LEFT_SIDEBAR = (By.XPATH, '//*[@class="cat-nav__list"]')
