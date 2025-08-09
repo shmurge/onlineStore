@@ -80,7 +80,7 @@ jobs:
       - name: Install Chrome
         if: "github.event.inputs.deployment_target == 'chrome-without-auth' || 
         github.event.inputs.deployment_target == 'chrome-with-auth'"
-        run: sudo apt-get install google-chrome-stable
+        run: sudo apt-get install google-chrome-stable=139.0.7258.67
       - name: Install Firefox
         if: "github.event.inputs.deployment_target == 'firefox-without-auth' ||
         github.event.inputs.deployment_target == 'firefox-with-auth'"
