@@ -2,53 +2,114 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains as AC
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import allure
 from time import sleep
 
 
-class Button:
+class BaseElement:
 
     def __init__(self, browser, name, how, what):
         self.browser = browser
         self.name = name
         self.locator = how, what
 
-    def get_button_element(self):
+    def get_element(self):
         self.is_element_visible(*self.locator)
         return self.browser.find_element(*self.locator)
 
-    def click(self):
+    def get_elements(self):
+        self.is_element_visible(*self.locator)
+        return self.browser.find_elements(*self.locator)
+
+    def get_element_by_text(self, text):
+        with allure.step(f'Поиск элемента: {text}'):
+            self.is_element_visible(By.XPATH, f"//*[text()='{text}']")
+            element = self.browser.find_element(By.XPATH, f"//*[text()='{text}']")
+        return element
+
+    def get_text_of_element(self, element=None):
+        element = element if element else self.get_element()
+
+        return element.text
+
+    def select_element_by_text(self, text):
+        with allure.step(f'Выбрать элемент: {text}'):
+            self.is_element_visible(By.XPATH, f"//*[text()='{text}']")
+            element = self.browser.find_element(By.XPATH, f"//*[text()='{text}']")
+            element.click()
+
+    def click(self, element=None):
+        element = element if element else self.get_element()
         with allure.step(f"Клик по: {self.name}"):
-            button = self.get_button_element()
-            button.click()
-
-    def double_click(self):
-        with allure.step(f"Двойной клик по: {self.name}"):
-            button = self.get_button_element()
             action = AC(self.browser)
-            action.double_click(button).perform()
+            action.click(element).perform()
 
-    def get_button_color(self):
+    def double_click(self, element=None):
+        element = element if element else self.get_element()
+        with allure.step(f"Двойной клик по: {self.name}"):
+            action = AC(self.browser)
+            action.double_click(element).perform()
+
+    def submit(self, element=None):
+        element = element if element else self.get_element()
+        with allure.step('Подтвердить'):
+            with allure.step(f"Подтвердить ввод в {self.name}"):
+                element.submit()
+
+    def scroll_to_element(self, element=None):
+        element = element if element else self.get_element()
+        action = AC(self.browser)
+        action.scroll_to_element(element)
+        action.perform()
+
+    def move_to_element(self, element=None):
+        element = element if element else self.get_element()
+        action = AC(self.browser)
+        action.move_to_element(element)
+        action.perform()
+
+    def is_element_visible(self, how, what, timeout=10, freq=0.5):
+        try:
+            WebDriverWait(self.browser, timeout, freq).until(EC.visibility_of_element_located((how, what)))
+        except TimeoutException:
+            return False
+        return True
+
+    def is_not_element_visible(self, how, what, timeout=10, freq=0.5):
+        try:
+            WebDriverWait(self.browser, timeout, freq).until_not(EC.visibility_of_element_located((how, what)))
+        except TimeoutException:
+            return False
+        return True
+
+
+class Button(BaseElement):
+
+    def get_button_color(self, element=None):
         sleep(0.5)
+        element = element if element else self.get_element()
         with allure.step(f"Получить цвет: {self.name}"):
-            button = self.get_button_element()
             color = self.browser.execute_script(
-                "return window.getComputedStyle(arguments[0]).getPropertyValue('background-color');", button)
+                "return window.getComputedStyle(arguments[0]).getPropertyValue('background-color');", element)
+
         return color
 
-    def check_button_color(self, exp_res):
+    def check_button_color(self, exp_color):
         with allure.step(f"Проверка цвета в: {self.name}"):
-            act_res = self.get_button_color()
-            assert act_res == exp_res, f"Несоответствие цвета в {self.name}! ОР: {exp_res}, ФР: {act_res}"
-
-    def get_button_text(self):
-        button_text = self.get_button_element().text
-        return button_text
+            sleep(0.5)
+            act_color = self.browser.execute_script(
+                "return window.getComputedStyle(arguments[0]).getPropertyValue('background-color');",
+                self.get_element()
+            )
+            assert act_color == exp_color, (f"Несоответствие цвета в {self.name}!\n"
+                                            f"ОР: {exp_color},\n"
+                                            f"ФР: {act_color}")
 
     def check_button_text(self, exp_res):
         with allure.step(f"Проверить текст в {self.name}"):
-            act_res = self.get_button_text()
+            act_res = self.get_text_of_element()
             assert act_res == exp_res, f"Некорректный текст в кнопке! ОР: {exp_res}, ФР: {act_res}"
 
     def waiting_clickable(self, timeout=5):
@@ -58,34 +119,12 @@ class Button:
             return False
         return True
 
-    def is_element_visible(self, how, what, timeout=10, freq=0.5):
-        try:
-            WebDriverWait(self.browser, timeout, freq).until(EC.visibility_of_element_located((how, what)))
-        except TimeoutException:
-            return False
-        return True
 
-
-class Input:
-
-    def __init__(self, browser, name, how, what):
-        self.browser = browser
-        self.name = name
-        self.locator = how, what
+class Input(BaseElement):
 
     def get_input_element(self):
         self.is_element_visible(*self.locator)
         return self.browser.find_element(*self.locator)
-
-    def click(self):
-        with allure.step(f"Клик по: {self.name}"):
-            action = AC(self.browser)
-            action.click().perform()
-
-    def double_click(self):
-        with allure.step(f"Двойной клик по: {self.name}"):
-            action = AC(self.browser)
-            action.double_click().perform()
 
     def clear_input(self):
         action = AC(self.browser)
@@ -125,17 +164,3 @@ class Input:
             act_placeholder = self.get_input_element().get_attribute("placeholder")
             assert act_placeholder == exp_placeholder, \
                 f"В {self.name} некорректный плэйсхолдер! ОР: {exp_placeholder}, ФР: {act_placeholder}"
-
-    def is_element_visible(self, how, what, timeout=10, freq=0.5):
-        try:
-            WebDriverWait(self.browser, timeout, freq).until(EC.visibility_of_element_located((how, what)))
-        except TimeoutException:
-            return False
-        return True
-
-    def is_not_element_visible(self, how, what, timeout=10, freq=0.5):
-        try:
-            WebDriverWait(self.browser, timeout, freq).until_not(EC.visibility_of_element_located((how, what)))
-        except TimeoutException:
-            return False
-        return True

@@ -1,5 +1,5 @@
 from random import *
-from elements.base_elements import *
+from elements.elements import *
 from pages.header_page import HeaderPage
 from locators.locs_searching_result_page import SearchingResultPageLocators
 

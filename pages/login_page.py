@@ -1,5 +1,5 @@
 from locators.locs_login_page import LoginPageLocators
-from elements.base_elements import *
+from elements.elements import *
 from pages.header_page import HeaderPage
 from src.data.data import *
 from time import sleep

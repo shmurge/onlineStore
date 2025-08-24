@@ -1,5 +1,5 @@
 from pages.header_page import HeaderPage
-from elements.base_elements import *
+from elements.elements import *
 from locators.locs_profile_page import ProfilePageLocators
 from src.data.data import *
 

@@ -1,5 +1,5 @@
 from random import *
-from elements.base_elements import *
+from elements.elements import *
 from locators.locs_catalogue_page import CataloguePageLocators
 from pages.header_page import HeaderPage
 from src.data.data import *

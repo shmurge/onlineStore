@@ -5,7 +5,7 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException,
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains as AC
-from elements.base_elements import Button
+from elements.elements import Button
 from locators.locs_header_page import HeaderPageLocators
 from locators.locs_base_page import BasePageLocators
 from time import sleep

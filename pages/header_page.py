@@ -1,5 +1,5 @@
 from pages.base_page import BasePage
-from elements.base_elements import *
+from elements.elements import *
 from locators.locs_header_page import HeaderPageLocators
 from locators.locs_login_page import LoginPageLocators
 from locators.locs_region_page import RegionPageLocators
@@ -16,8 +16,16 @@ class HeaderPage(BasePage):
         self.login_input = Input(self.browser, "Инпут Логин", *LoginPageLocators.LOGIN_INPUT)
         self.password_input = Input(self.browser, "Инпут Пароль", *LoginPageLocators.PASSWORD_INPUT)
         self.main_input = Input(self.browser, "Инпут Поиск в хэдере", *HeaderPageLocators.MAIN_SEARCH_INPUT)
-        self.main_search_button = (
-            Button(self.browser, "Кнопка Искать", *HeaderPageLocators.SEARCH_BUTTON_IN_MAIN_SEARCH_INPUT))
+        self.main_search_autocomplete_input = Input(
+            self.browser,
+            "Инпут поиска с автозаполнением",
+            *HeaderPageLocators.MAIN_SEARCH_AUTOCOMPLETE_INPUT
+        )
+        self.main_search_button = Button(
+            self.browser,
+            "Кнопка Искать",
+            *HeaderPageLocators.SEARCH_BUTTON_IN_MAIN_SEARCH_INPUT
+        )
         self.sign_in_button = Button(self.browser, "Кнопка Войти", *LoginPageLocators.SIGN_IN_BUTTON)
         self.catalogue_button = Button(self.browser, "Кнопка Каталог", *HeaderPageLocators.CATALOGUE_BUTTON)
 
@@ -104,10 +112,16 @@ class HeaderPage(BasePage):
                 element = el
         return element
 
+    # def search_product_by_main_search_input(self, data):
+    #     with allure.step("Поиск товара через инпут поиска в хэдере"):
+    #         self.main_input.send_keys_in_input(data)
+    #         self.main_search_button.click()
+
     def search_product_by_main_search_input(self, data):
         with allure.step("Поиск товара через инпут поиска в хэдере"):
-            self.main_input.send_keys_in_input(data)
-            self.main_search_button.click()
+            self.main_input.click()
+            self.main_search_autocomplete_input.send_keys_in_input(data)
+            self.main_search_autocomplete_input.submit()
 
     def go_to_cart_page(self):
         with allure.step("Перейти в Корзину"):

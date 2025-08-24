@@ -16,6 +16,7 @@ class HeaderPageLocators:
     CART_VALUE_EMPTY = (By.XPATH, '//*[@class="h-basket__empty"]')
 
     MAIN_SEARCH_INPUT = (By.XPATH, '//*[@id="main-search-input"]')
+    MAIN_SEARCH_AUTOCOMPLETE_INPUT = (By.XPATH, '//*[@id="autocomplete-v2-search"]')
     SEARCH_BUTTON_IN_MAIN_SEARCH_INPUT = (By.XPATH, '//*[@class="h-search__btn"]')
 
     CATALOGUE_BUTTON = (By.XPATH, '//*[contains(@class, "main-nav-v2__catalog--desc")]')

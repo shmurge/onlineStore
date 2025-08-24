@@ -1,6 +1,6 @@
 from locators.locs_product_page import ProductPageLocators
 from pages.header_page import HeaderPage
-from elements.base_elements import *
+from elements.elements import *
 from time import sleep
 
 
